@@ -71,7 +71,7 @@
 }
 .button__position{
     position: absolute;
-    bottom: 0;
+    bottom: 5vh;
     display: flex;
     justify-content: center;
     align-items: center;
