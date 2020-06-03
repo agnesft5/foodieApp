@@ -10,46 +10,62 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pattaya&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
     <title>Foodie App</title>
 </head>
 
 <body>
     <div class="d-block d-sm-none main__wrapper">
-        <div class="top__container">
-            <div class="row m-0 p-0">
-                <div class="col-4 m-0 p-0 col__height showBorder">
-    
-                </div>
-            </div>
-            <div class="row m-0 p-0">
-                <div class="col-4 m-0 p-0 col__height showBorder">
-    
-                </div>
-            </div>
-            <div class="row m-0 p-0">
-                <div class="col-4 m-0 p-0 col__height showBorder">
-    
+        <!--First view-->
+        <div class="m-0 p-0" id="first__view">
+            <div class="header showBorder">
+
+            </div>  
+            <div class="main showBorder">
+                <div class="main__position">
+                    <p class="first__title mainfirsttitle__position">Welcome to the Foodie App!</p>
+                    <img class="main__img" src="./assets/fox.png" alt="">
                 </div>
             </div>
         </div>
-        <div class="bottom__container">
-            <div class="row m-0 p-0">
-                <div class="col-4 m-0 p-0 col__height showBorder">
-    
+        <!--Second view-->
+        <div id="second__view" class="d-none">
+            <div class="header showBorder">
+
+            </div>  
+            <div class="main showBorder">
+                <div class="main__position">
+                    <p class="second__title mainsecondtitle__position">The Foodie App will help you discover the nutritional value of the food you have on hand</p>
+                    <img class="main__img" src="./assets/fox2.png" alt="">
                 </div>
             </div>
-            <div class="row m-0 p-0">
-                <div class="col-4 m-0 p-0 col__height showBorder">
-    
+        </div>
+        <!--Third view-->
+        <div id="third__view" class="d-none">
+            <div class="header showBorder">
+
+            </div>  
+            <div class="main showBorder">
+                <div class="main__position">
+                    <p class="third__title mainthirdtitle__position">Start scanning your codes to find out what are you eating!!</p>
+                    <img class="main__img" src="./assets/fox3.png" alt="">
+                    <div class="button__position">
+                        <button class="start__button">START SCANNING</button>
+                    </div>
                 </div>
             </div>
+        </div>
+        <!--Bullet point footer-->
+        <div class="footer showBorder">
             <div class="row m-0 p-0">
-                <div class="col-4 m-0 p-0 col__height showBorder">
-    
+                <div class="col-4 m-0 p-0"></div>
+                <div class="col-4 bulletPoint__container m-0 p-0">
+                    <div class="bullet__point bullet__active"></div><div class="bullet__point"></div><div class="bullet__point"></div>
                 </div>
             </div>
-        </div>        
+        </div>   
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

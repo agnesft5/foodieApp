@@ -1,26 +1,124 @@
-.showBorder{
+/* .showBorder{
     border: solid;
-}
-.col__height{
-    height: 5vh;
-    background-color: blueviolet;
-}
+} */
 .main__wrapper{
     height: 100vh;
     width: 100vw;
     margin: 0;
     padding: 0;
-    border: 2px solid red;
+    background-color: rgba(180, 228, 201, .5);
 }
-.top__container{
+.header{
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
+    height: 20vh;
 }
-.bottom__container{
+.main{
     position: absolute;
-    bottom: 0;
+    top: 20vh;
     left: 0;
     width: 100%;
+    height: 60vh;
+}
+.main__position{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+}
+.main__img{
+    width: 80%;
+}
+.first__title{
+    font-family: 'Pattaya', sans-serif;
+    font-size: 2.15rem;
+    color: rgba(180, 228, 201, 1);
+    text-shadow: 1px 1px black;
+}
+.second__title{
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 2rem;
+    color: white;
+    text-shadow: 1px 1px #167663;;
+    
+}
+.third__title{
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 2rem;
+    color: white;
+    text-shadow: 1px 1px #167663;;
+    
+}
+.mainfirsttitle__position{
+    position: absolute;
+    top: 3vh;
+    width: 50%;
+    right: 2vw;
+    transform: rotate(6deg);
+}
+.mainsecondtitle__position{   
+    position: absolute;
+    top: -11vh;
+    width: 85%;
+    left: 10vw;
+}
+.mainthirdtitle__position{   
+    position: absolute;
+    top: -11vh;
+    width: 65%;
+}
+.button__position{
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5vh;
+}
+.start__button{
+    background-color: white;
+    border: 2px solid rgba(180, 228, 201, 1);
+    color: rgba(180, 228, 201, 1);
+    width: 60vw;
+    height: 100%;
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 1.25rem;
+    outline: none;
+}
+.start__button:hover, .start__button:focus{
+    background-color: rgba(180, 228, 201, .2);
+    border: 2px solid white;
+    color: white;
+    width: 60vw;
+    height: 100%;
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 1.25rem;
+    outline: none;
+}
+.footer{
+    bottom: 0;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 20vh;
+}
+.bulletPoint__container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 10vh;
+}
+.bullet__point{
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background-color: white;
+    margin: 12%;
+    box-shadow: 1px 1px black;
+}
+.bullet__active{
+    background-color: rgba(180, 228, 201, 1);
 }
