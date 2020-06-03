@@ -1,35 +1,102 @@
+// VIEWS
 let first = document.querySelector('#first__view');
 let second = document.querySelector('#second__view');
 let third = document.querySelector('#third__view');
+let fourth = document.querySelector('#fourth__view');
 
+//COMPONENTS
+let display = document.querySelector('#display');
+let loading = document.querySelector('#loading');
+let resultContainer = document.querySelector('#result__container');
+let result = document.querySelector('#result');
+
+// BUTTONS
 let firstBullet = document.querySelectorAll('.bullet__point')[0];
 let secondBullet = document.querySelectorAll('.bullet__point')[1];
 let thirdBullet = document.querySelectorAll('.bullet__point')[2];
+let startButton = document.querySelector('.start__button');
+let okButton = document.querySelector('.ok__icon');
+let tryAgainButton = document.querySelector('.no__icon');
 
-firstBullet.addEventListener('click', ()=>{
+firstBullet.addEventListener('click', () => {
     third.classList.add('d-none');
     second.classList.add('d-none');
+    fourth.classList.add('d-none');
     first.classList.remove('d-none');
     document.querySelectorAll('.bullet__point').forEach(bullet => {
         bullet.classList.remove('bullet__active');
     })
     firstBullet.classList.add('bullet__active');
 })
-secondBullet.addEventListener('click', ()=>{
+secondBullet.addEventListener('click', () => {
     first.classList.add('d-none');
     third.classList.add('d-none');
+    fourth.classList.add('d-none');
     second.classList.remove('d-none');
     document.querySelectorAll('.bullet__point').forEach(bullet => {
         bullet.classList.remove('bullet__active');
     })
     secondBullet.classList.add('bullet__active');
 })
-thirdBullet.addEventListener('click', ()=>{
+thirdBullet.addEventListener('click', () => {
     first.classList.add('d-none');
     second.classList.add('d-none');
+    fourth.classList.add('d-none');
     third.classList.remove('d-none');
     document.querySelectorAll('.bullet__point').forEach(bullet => {
         bullet.classList.remove('bullet__active');
     })
     thirdBullet.classList.add('bullet__active');
+})
+startButton.addEventListener('click', () => {
+    first.classList.add('d-none');
+    second.classList.add('d-none');
+    third.classList.add('d-none');
+    fourth.classList.remove('d-none');
+    document.querySelectorAll('.bullet__point').forEach(bullet => {
+        bullet.classList.add('d-none');
+    })
+    Quagga.init({
+        inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            target: document.querySelector('#camera')
+        },
+        decoder: {
+            readers: ["code_128_reader"]
+        }
+    }, function (err) {
+        if (err) {
+            console.log(err);
+            return
+        }
+        console.log("Initialization finished. Ready to start");
+        Quagga.start();
+    });
+})
+Quagga.onDetected((data) => {
+    console.log(data['codeResult']['code']);
+    display.classList.remove('d-none');
+    loading.classList.remove('d-none');
+    setTimeout(() => {
+        loading.classList.add('d-none');
+        result.textContent = data['codeResult']['code'];
+        resultContainer.classList.remove('d-none');
+    }, 3000);
+
+})
+tryAgainButton.addEventListener('click', () => {
+    setTimeout(() => {
+        display.classList.add('d-none');
+        loading.classList.add('d-none');
+        resultContainer.classList.add('d-none');
+    }, 1000);
+})
+okButton.addEventListener('click', ()=>{
+    setTimeout(() => {
+        display.classList.add('d-none');
+        loading.classList.add('d-none');
+        resultContainer.classList.add('d-none');
+        Quagga.stop();
+    }, 1000);
 })
