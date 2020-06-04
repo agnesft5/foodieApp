@@ -7,13 +7,14 @@ let second = document.querySelector('#second__view');
 let third = document.querySelector('#third__view');
 let fourth = document.querySelector('#fourth__view');
 let fifth = document.querySelector('#fifth__view');
+let sixth = document.querySelector('#sixth__view');
 
 //COMPONENTS
 let display = document.querySelector('#display');
 let loading = document.querySelector('#loading');
 let resultContainer = document.querySelector('#result__container');
 let result = document.querySelector('#result');
-let codeInput  = document.querySelector('.code__input')
+let codeInput = document.querySelector('.code__input')
 
 // BUTTONS
 let firstBullet = document.querySelectorAll('.bullet__point')[0];
@@ -30,6 +31,7 @@ firstBullet.addEventListener('click', () => {
     second.classList.add('d-none');
     fourth.classList.add('d-none');
     fifth.classList.add('d-none');
+    sixth.classList.add('d-none');
     first.classList.remove('d-none');
     document.querySelectorAll('.bullet__point').forEach(bullet => {
         bullet.classList.remove('bullet__active');
@@ -41,6 +43,7 @@ secondBullet.addEventListener('click', () => {
     third.classList.add('d-none');
     fourth.classList.add('d-none');
     fifth.classList.add('d-none');
+    sixth.classList.add('d-none');
     second.classList.remove('d-none');
     document.querySelectorAll('.bullet__point').forEach(bullet => {
         bullet.classList.remove('bullet__active');
@@ -52,6 +55,7 @@ thirdBullet.addEventListener('click', () => {
     second.classList.add('d-none');
     fourth.classList.add('d-none');
     fifth.classList.add('d-none');
+    sixth.classList.add('d-none');
     third.classList.remove('d-none');
     document.querySelectorAll('.bullet__point').forEach(bullet => {
         bullet.classList.remove('bullet__active');
@@ -63,6 +67,7 @@ startButton.addEventListener('click', () => {
     second.classList.add('d-none');
     third.classList.add('d-none');
     fifth.classList.add('d-none');
+    sixth.classList.add('d-none');
     fourth.classList.remove('d-none');
     document.querySelectorAll('.bullet__point').forEach(bullet => {
         bullet.classList.add('d-none');
@@ -105,7 +110,7 @@ tryAgainButton.addEventListener('click', () => {
             target: document.querySelector('#camera')
         },
         decoder: {
-            readers: ["code_128_reader", "ean_5_reader","ean_8_reader", "ean_2_reader", "code_39_reader", "code_93_reader"]
+            readers: ["code_128_reader", "ean_5_reader", "ean_8_reader", "ean_2_reader", "code_39_reader", "code_93_reader"]
         }
     }, function (err) {
         if (err) {
@@ -121,21 +126,40 @@ tryAgainButton.addEventListener('click', () => {
         resultContainer.classList.add('d-none');
     }, 3000);
 })
-okButton.addEventListener('click', ()=>{
+okButton.addEventListener('click', () => {
     setTimeout(() => {
         display.classList.add('d-none');
         loading.classList.add('d-none');
         resultContainer.classList.add('d-none');
         code = result.innerHTML;
+        first.classList.add('d-none');
+        second.classList.add('d-none');
+        third.classList.add('d-none');
+        fourth.classList.add('d-none');
+        fifth.classList.add('d-none');
+        sixth.classList.remove('d-none');
+        setTimeout(() => {
+            sixth.classList.add('d-none');
+        }, 3000);
     }, 1000);
 })
-notWorking.addEventListener('click', ()=>{
+notWorking.addEventListener('click', () => {
     first.classList.add('d-none');
     second.classList.add('d-none');
     third.classList.add('d-none');
     fourth.classList.add('d-none');
     fifth.classList.remove('d-none');
+    sixth.classList.add('d-none');
 })
-sendButton.addEventListener('click', ()=>{
-    code = codeInput.value;  
+sendButton.addEventListener('click', () => {
+    code = codeInput.value;
+    first.classList.add('d-none');
+    second.classList.add('d-none');
+    third.classList.add('d-none');
+    fourth.classList.add('d-none');
+    fifth.classList.add('d-none');
+    sixth.classList.remove('d-none');
+    setTimeout(() => {
+        sixth.classList.add('d-none');
+    }, 3000);
 })

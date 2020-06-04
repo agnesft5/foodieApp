@@ -296,4 +296,9 @@ canvas{
     align-items: center;
     height: 5vh;
 }
-  
+.loading__position{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+}  
