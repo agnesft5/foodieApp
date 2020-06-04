@@ -286,7 +286,7 @@ canvas{
 }
 .notWorking__position{
     position: absolute;
-    bottom: 5vh;
+    bottom: 0vh;
     left: 0vw;
     width: 100%;
 }
