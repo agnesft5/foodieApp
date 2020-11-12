@@ -1,7 +1,7 @@
 /* .showBorder{
     border: solid;
 } */
-body, html{
+.unScrollable{
     margin: 0;
     padding: 0;
     height: 100%;
@@ -9,11 +9,13 @@ body, html{
     overflow: hidden;
 }
 .main__wrapper{
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
     margin: 0;
     padding: 0;
     background-color: rgba(180, 228, 201, .5);
+    height: fit-content;
+    overflow: auto;
 }
 .header{
     position: absolute;
@@ -38,22 +40,11 @@ body, html{
 .main__img{
     width: 80%;
 }
-.first__title, .fourth__title{
+.first__title,.second__title,.third__title, .fourth__title, .fifth__title{
     font-family: 'Pattaya', sans-serif;
     font-size: 2.15rem;
     color: rgba(180, 228, 201, 1);
     text-shadow: 1px 1px black;
-}
-.second__title, .third__title, .fifth__title{
-    /* font-family: 'Alegreya Sans', sans-serif;
-    font-size: 2rem;
-    color: #167663;
-    text-shadow: 1px 1px white; */
-    font-family: 'Pattaya', sans-serif;
-    font-size: 2.15rem;
-    color: rgba(180, 228, 201, 1);
-    text-shadow: 1px 1px black;
-    
 }
 .mainfirsttitle__position{
     position: absolute;
@@ -301,4 +292,139 @@ canvas{
     justify-content: center;
     align-items: center;
     height: 60vh;
-}  
+}
+.macro__card{
+    border-radius: .75rem;
+    border: 1px solid rgba(180, 228, 201, .3);
+    background-color: rgba(250, 250, 250, .5);
+    height: 8vh;
+    width: 95%;
+    margin: 3% auto;
+}
+.headerseventh__position{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    height: 40vh;
+    z-index: 10;
+    background-color: rgb(217, 241, 228);
+    top: 0;
+    left: 0;
+}
+.foodImg__position{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5%;
+    margin-right: 2.5%;
+}
+.food__img{
+    /* width: 95%; */
+    vertical-align: middle;
+    border-radius: .35rem;
+    height: 30vh;
+}
+.header__productName{
+    margin: 5%;
+    margin-left: 2.5%;
+}
+.seventh__title{
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 1.25rem;
+    color: #167663;
+    text-shadow: 1px 1px white;
+    font-weight: 600;
+}
+.seventh__subTitle{
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 1rem;
+    color: black;
+    font-weight: 400;
+}
+.seventh__position{
+    width: 95%;
+    margin: 0 auto !important;
+}
+.mainseventh__position{
+    position: relative;
+    left: 0;
+    width: 100%;
+    top: 41vh;
+    max-height: 40vh;
+    overflow: scroll;
+}
+.macroCard__align{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.icon__size{
+    font-size: x-large;
+    color: rgba(180, 228, 201, 1);
+}
+.simpleText{
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 1rem;
+    color: black;
+    margin: 0 !important;
+}
+.quantityTitle__closed, .ingredientsSelect__closed{
+    position: relative;
+    top: 40vh;
+    text-align: left;
+    border-bottom: 1.5px solid #167663;
+    width: 93%;
+    margin: 0 auto;
+    height: 4vh;
+    overflow: hidden;
+}
+.ingredientsSelect__closed{
+    border-bottom: none;
+    top: 44vh;
+    background-color: rgb(217, 241, 228);
+}
+.ingredients__separator{
+    height: 1.5px;
+    border-bottom: 2px solid #167663;
+    width: 100%;
+}
+.quantityTitle__opened{
+    position: relative;
+    top: 40vh;
+    text-align: left;
+    border-bottom: 1.5px solid #167663;
+    width: 93%;
+    margin: 0 auto;
+    height: 8vh;
+    overflow: hidden;
+}
+.ingredientsSelect__opened{
+    position: relative;
+    top: 44vh;
+    text-align: left;
+    width: 93%;
+    margin: 0 auto;
+    min-height: fit-content;
+    overflow: hidden;
+    background-color: rgb(217, 241, 228);
+}
+.quantity__title, .ingredients__title{
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 1.1rem;
+    color: #167663;
+    margin: 0 !important;
+}
+.ingredients__card{
+    border-radius: .75rem;
+    border: 1px solid rgba(180, 228, 201, .3);
+    background-color: rgba(250, 250, 250, .5);
+    width: 100%;
+    margin: 3% auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+}

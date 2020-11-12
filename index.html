@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="unScrollable">
 
 <head>
     <!-- Required meta tags -->
@@ -18,8 +18,8 @@
     <title>Foodie App</title>
 </head>
 
-<body>
-    <div class="d-block d-sm-none main__wrapper">
+<body class="unScrollable">
+    <div id="main" class="d-block d-sm-none main__wrapper">
         <!--ONBOARDING-->
         <!--First view-->
         <div class="m-0 p-0" id="first__view">
@@ -63,7 +63,7 @@
             </div>
         </div>
         <!--Bullet point footer-->
-        <div class="footer showBorder">
+        <div id="footer" class="footer showBorder">
             <div class="row m-0 p-0">
                 <div class="col-4 m-0 p-0"></div>
                 <div class="col-4 bulletPoint__container m-0 p-0">
@@ -124,10 +124,11 @@
             </div>
             <div class="main showBorder">
                 <div class="main__position">
-                    <p class="fifth__title mainfifthtitle__position">I am sorry the scanner did not work. Type your code here!</p>
+                    <p class="fifth__title mainfifthtitle__position">I am sorry the scanner did not work. Type your code
+                        here!</p>
                     <img class="main__img" src="./assets/fox5.png" alt="">
                     <div class="input__position">
-                        <input class="code__input" type="number" placeholder="8422904015553">
+                        <input class="code__input" type="number" placeholder="8422904015553" required>
                     </div>
                     <div class="button__position">
                         <button class="send__button">SEND</button>
@@ -149,6 +150,64 @@
                             <div></div>
                             <div></div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Seventh view-->
+        <div id="seventh__view" class="d-none">
+            <div class="seventh__position">
+                <div class="headerseventh__position">
+                    <div class="foodImg__position">
+                        <img class="food__img" src="" alt="">
+                    </div>
+                    <div class="header__productName">
+                        <p id="productName" class="seventh__title"></p>
+                        <p id="productBrand" class="seventh__subTitle"></p>
+                    </div>
+                </div>
+                <div id="quantitySelect" class="quantityTitle__closed">
+                    <!--Quantity select-->
+                    <div class="row m-0 p-0">
+                        <div class="col-7 m-0 p-0">
+                            <p class="quantity__title">Nutritional values</p>
+                        </div>
+                        <div class="col-3 m-0 p-0">
+                            <p class="quantity__title">per <span id="quantity1">100</span>g</p>
+                        </div>
+                        <div class="col-2 m-0 p-0 text-center">
+                            <p class="quantity__title"><i id="quantityIcon" class="fas fa-angle-down"></i></p>
+                        </div>
+                    </div>
+                    <div class="row m-0 p-0">
+                        <div class="col-7 m-0 p-0">
+                            
+                        </div>
+                        <div id="quantityOption" class="col-3 m-0 p-0">
+                            <p class="quantity__title">per <span id="quantity2"></span>g</p>
+                        </div>
+                        <div class="col-2 m-0 p-0">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div id="cardsContainer" class="mainseventh__position">
+                </div>
+                <div id="ingredientsSelect" class="ingredientsSelect__closed">
+                    <!--Ingredients select-->
+                    <div class="row m-0 p-0">
+                        <div class="col-7 m-0 p-0">
+                            <p class="ingredients__title">Ingredients</p>
+                        </div>
+                        <div class="col-3 m-0 p-0">
+                        </div>
+                        <div class="col-2 m-0 p-0 text-center">
+                            <p class="ingredients__title"><i id="ingredientsIcon" class="fas fa-angle-down"></i></p>
+                        </div>
+                        <div class="ingredients__separator"></div>
+                    </div>
+                    <div id="ingredientsCard" class="ingredients__card">
+                        <p id="ingredientsText" class="simpleText p-5"></p>
                     </div>
                 </div>
             </div>
