@@ -11,6 +11,11 @@ let macros = [
     { title: "Saturated fat", name: "saturated-fat", icon: `<i class="fas fa-bacon icon__size"></i>` },
     { title: "Salt", name: "salt", icon: `<i class="fas fa-cube icon__size"></i>` }
 ]
+// let tagIcons = [
+//     {'palm oil free':``},
+//     {'vegeterian':`<i class="fas fa-leaf icon__size"></i>`},
+//     {'vegan':`<i class="fas fa-seedling icon__size"></i>`},
+// ]
 let nutriments = [];
 let firstQuantity;
 let secondQuantity;
@@ -19,6 +24,9 @@ let servingQuantity;
 let selectClicked = false;
 let ingredients = [];
 let ingredientsClicked = false;
+let tags = [];
+let correctedTags = [];
+let tagsClicked = false;
 let products = [];
 
 //GET
@@ -160,6 +168,49 @@ function showData(data) {
             ingredientsText.textContent = objProduct.product.product_name;
         }
 
+        //tags
+        tags = objProduct.product.ingredients_analysis_tags
+        if(tags){
+            for (let i = 0; i <= tags.length -1; i++){
+                let tag = tags[i]
+                let correctedTag = [];
+                for (let j = 0; j <= tag.length -1; j++){
+                    if([j]>2){
+                        correctedTag.push(tag[j])
+                    }
+                }
+            correctedTags.push(correctedTag.join('').split('-').join(' '));
+            }
+            console.log(correctedTags);
+            for ( i = 0; i<= correctedTags.length -1; i++){
+                let tagTitle = correctedTags[i];
+                let tagCard = document.createElement('div');
+                tagCard.classList.add('tags__card', 'row');
+
+                let tag__title = document.createElement('p');
+                tag__title.textContent = tagTitle;
+                tag__title.classList.add('simpleText', 'capitalize')
+                
+                let tagIconCol = document.createElement('div');
+                tagIconCol.classList.add('col-2', 'macroCard__align');
+                // tagIconCol.innerHTML = ;
+                
+                let tagTitleCol = document.createElement('div');
+                tagTitleCol.classList.add('col-4', 'macroCard__align');
+
+                tagCard.appendChild(tagIconCol);
+                tagCard.appendChild(tagTitleCol);
+
+                tagTitleCol.appendChild(tag__title);
+                
+                tagsContainer.appendChild(tagCard);
+            }
+
+            
+        }else{
+
+        }
+
         main.scrollTo({
             top: 800,
             left: 0,
@@ -214,6 +265,7 @@ let quantity1 = document.querySelector('#quantity1');
 let quantity2 = document.querySelector('#quantity2');
 let ingredientsCard = document.querySelector('#ingredientsCard');
 let ingredientsText = document.querySelector('#ingredientsText');
+let tagsContainer = document.querySelector('#tagsContainer');
 let footer = document.querySelector("#footer");
 
 // BUTTONS
@@ -227,6 +279,7 @@ let tryAgainButton = document.querySelector('.no__icon');
 let notWorking = document.querySelector('#notWorking');
 let quantityButton = document.querySelector('#quantityIcon');
 let ingredientsButton = document.querySelector('#ingredientsIcon');
+let tagsButton = document.querySelector('#tagsIcon');
 
 firstBullet.addEventListener('click', () => {
     third.classList.add('d-none');
@@ -471,6 +524,25 @@ ingredientsButton.addEventListener('click', () => {
         })
     }
 })
+
+tagsButton.addEventListener('click',()=>{
+    if (tagsClicked == false) {
+        tagsSelect.classList.add('tagsSelect__closed');
+        tagsSelect.classList.remove('tagsSelect__opened');
+        tagsClicked = true;
+    } else {
+        tagsSelect.classList.remove('tagsSelect__closed');
+        tagsSelect.classList.add('tagsSelect__opened');
+        tagsClicked = false;
+        main.scrollTo({
+            top: 800,
+            left: 0,
+            behavior: "smooth"
+        })
+    }
+})
+
+
 
 //8422904015553
 //8436008521063
