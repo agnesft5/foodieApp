@@ -82,7 +82,7 @@ function showData(data) {
             let productValue = objProduct.product.nutriments[value];
             let productUnit = objProduct.product.nutriments[unit];
             nutriments.push({ value: productValue, unit: productUnit });
-            info.textContent = `${parseInt(productValue * (quantity1.textContent / 100))} ${productUnit}`;
+            info.textContent = `${productValue * (quantity1.textContent / 100).toFixed(2)} ${productUnit}`;
 
             //rate col
             //this col is still empty in case I want to add something else
