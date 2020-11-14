@@ -16,9 +16,10 @@ let firstQuantity;
 let secondQuantity;
 let percent = 100;
 let servingQuantity;
-let selectClicked = 0;
+let selectClicked = false;
 let ingredients = [];
-let ingredientsClicked = 0;
+let ingredientsClicked = false;
+let products = [];
 
 //GET
 function httpGet(theUrl, callback) {
@@ -39,85 +40,149 @@ function showData(data) {
     objProduct = JSON.parse(data);
     console.log(objProduct);
     console.log(objProduct.product);
-    //picture
-    foodImg.setAttribute('src', objProduct.product.image_url);
-    //name
-    productName.textContent = objProduct.product.product_name;
-    //brand
-    productBrand.textContent = objProduct.product.brands.split(",").join(", ");
-
-    //nutriments
-    for (let i = 0; i <= macros.length - 1; i++) {
-        //title text
-        let title = document.createElement('p');
-        title.classList.add('simpleText');
-        //info text
-        let info = document.createElement('p');
-        info.classList.add('simpleText');
-        info.setAttribute('id', 'infoOutput');
-
-        //icon col
-        let iconCol = document.createElement('div');
-        iconCol.classList.add('col-2', 'macroCard__align');
-        iconCol.innerHTML = macros[i]['icon'];
-        //title col
-        let titleCol = document.createElement('div');
-        titleCol.classList.add('col-4', 'macroCard__align');
-        titleCol.appendChild(title);
-        title.textContent = macros[i]['title'];
-        //info col
-        let infoCol = document.createElement('div');
-        infoCol.classList.add('col-4', 'macroCard__align');
-        infoCol.appendChild(info);
-        let index = macros[i]['name'];
-        let value = `${index}_value`;
-        let unit = `${index}_unit`;
-        let productValue = objProduct.product.nutriments[value];
-        let productUnit = objProduct.product.nutriments[unit];
-        nutriments.push({ value: productValue, unit: productUnit });
-        info.textContent = `${parseInt(productValue * (quantity1.textContent / 100))} ${productUnit}`;
-
-        //rate col
-        let rateCol = document.createElement('div');
-        rateCol.classList.add('col-2', 'macroCard__align');
-
-        //card
-        let card = document.createElement('div');
-        card.classList.add('row', 'macro__card');
-        card.setAttribute('id', macros[i]['title']);
-        card.appendChild(iconCol);
-        card.appendChild(titleCol);
-        card.appendChild(infoCol);
-        card.appendChild(rateCol);
-        if ((info.textContent.includes(NaN)) || (info.textContent.includes(undefined)) || (info.textContent.includes(null))) {
-            card.classList.add('d-none');
+    if (objProduct.status_verbose == 'product found') {
+        //picture
+        foodImg.setAttribute('src', objProduct.product.image_url);
+        //name
+        productName.textContent = objProduct.product.product_name;
+        //brand
+        if (objProduct.product.brands) {
+            productBrand.textContent = objProduct.product.brands.split(",").join(", ");
         }
-        cardsContainer.appendChild(card);
 
-        //quantities
-        servingQuantity = objProduct.product.product_quantity;
-        firstQuantity = percent;
-        secondQuantity = servingQuantity;
-        quantity1.textContent = firstQuantity;
-        quantity2.textContent = secondQuantity;
-        if ((secondQuantity == "") || (secondQuantity == NaN) || (secondQuantity == null) || (secondQuantity == undefined)) {
-            document.querySelector('#quantityOption').classList.add('d-none');
+        //rate
+        let labels = objProduct.product.nutrient_levels;
+
+        //nutriments
+        for (let i = 0; i <= macros.length - 1; i++) {
+            //title text
+            let title = document.createElement('p');
+            title.classList.add('simpleText');
+            //info text
+            let info = document.createElement('p');
+            info.classList.add('simpleText');
+            info.setAttribute('id', 'infoOutput');
+
+            //icon col
+            let iconCol = document.createElement('div');
+            iconCol.classList.add('col-2', 'macroCard__align');
+            iconCol.innerHTML = macros[i]['icon'];
+            //title col
+            let titleCol = document.createElement('div');
+            titleCol.classList.add('col-4', 'macroCard__align');
+            titleCol.appendChild(title);
+            title.textContent = macros[i]['title'];
+            //info col
+            let infoCol = document.createElement('div');
+            infoCol.classList.add('col-4', 'macroCard__align');
+            infoCol.appendChild(info);
+            let index = macros[i]['name'];
+            let value = `${index}_value`;
+            let unit = `${index}_unit`;
+            let productValue = objProduct.product.nutriments[value];
+            let productUnit = objProduct.product.nutriments[unit];
+            nutriments.push({ value: productValue, unit: productUnit });
+            info.textContent = `${parseInt(productValue * (quantity1.textContent / 100))} ${productUnit}`;
+
+            //rate col
+            //this col is still empty in case I want to add something else
+            let rateCol = document.createElement('div');
+            rateCol.classList.add('col-2', 'macroCard__align');
+            let rate = document.createElement('div');
+            rate.classList.add('rate__indicator');
+            rateCol.appendChild(rate);
+
+            for (let k = 0; k <= Object.keys(labels).length - 1; k++) {
+                if (macros[i]['name'] == Object.keys(labels)[k]) {
+                    //check
+                    // console.log('hi', macros[i]['name'], Object.keys(labels)[k]);
+                    // console.log(labels[macros[i]['name']]);
+                    if (labels[macros[i]['name']] == 'low') {
+                        rate.classList.add('rate__good')
+                    } else if (labels[macros[i]['name']] == "moderate") {
+                        rate.classList.add('rate__moderate')
+                    } else if (labels[macros[i]['name']]) {
+                        rate.classList.add('rate__bad')
+                    } else {
+                        console.log('Rate not found')
+                    }
+                }
+            }
+
+            //card
+            let card = document.createElement('div');
+            card.classList.add('row', 'macro__card');
+            card.setAttribute('id', macros[i]['title']);
+            card.appendChild(iconCol);
+            card.appendChild(titleCol);
+            card.appendChild(infoCol);
+            card.appendChild(rateCol);
+            if ((info.textContent.includes(NaN)) || (info.textContent.includes(undefined)) || (info.textContent.includes(null))) {
+                card.classList.add('d-none');
+            }
+            cardsContainer.appendChild(card);
+
+            //quantities
+            //SERVING
+            if (objProduct.product.serving_quantity && objProduct.product.serving_quantity != percent) {
+                servingQuantity = objProduct.product.serving_quantity;
+                //NO WATER
+            } else if (objProduct.product.serving_quantity && objProduct.product.serving_quantity != percent) {
+                servingQuantity = objProduct.product.product_quantity;
+                //WEIGHT
+            } else {
+                servingQuantity = objProduct.product.product_quantity;
+            }
+
+            firstQuantity = percent;
+            secondQuantity = servingQuantity;
+            quantity1.textContent = firstQuantity;
+            quantity2.textContent = secondQuantity;
+            if ((secondQuantity == "") || (secondQuantity == NaN) || (secondQuantity == null) || (secondQuantity == undefined)) {
+                document.querySelector('#quantityOption').classList.add('d-none');
+            }
+
         }
+
+        //ingredients
+
+        // let ingredientsDebug = objProduct.product.ingredients_debug;
+        // for (let i = 0; i <= ingredientsDebug.length - 1; i++) {
+        //     ingredients.push(ingredientsDebug[i]);
+        // }
+        // ingredientsText.textContent = ingredients.join("");
+
+        if (objProduct.product.ingredients_text) {
+            ingredientsText.textContent = objProduct.product.ingredients_text;
+        } else if (objProduct.product.ingredients_text_es) {
+            ingredientsText.textContent = objProduct.product.ingredients_text_es;
+        } else {
+            ingredientsText.textContent = objProduct.product.product_name;
+        }
+
+        main.scrollTo({
+            top: 800,
+            left: 0,
+            behavior: "smooth"
+        })
+
+        // let productObject = { 'name': objProduct.product.product_name, 'code': objProduct.product.id, 'img': objProduct.product.image_url };
+        // let productsArray = [];
+
+        // if (localStorage.getItem('products')){
+        //     products.push(JSON.parse(localStorage.getItem('products')))
+        // }
+        // localStorage.setItem('products', JSON.stringify(productsArray));
+
+    } else {
 
     }
-    ingredients
-    // let ingredientsDebug = objProduct.product.ingredients_debug;
-    // for (let i = 0; i <= ingredientsDebug.length - 1; i++) {
-    //     ingredients.push(ingredientsDebug[i]);
-    // }
-    // ingredientsText.textContent = ingredients.join("");
-    ingredientsText.textContent = objProduct.product.ingredients_text;
-
 }
 
 //CHANGE LINK
 function changeLink(productCode) {
     httpGet(`https://cors-anywhere.herokuapp.com/https://world.openfoodfacts.org/api/v0/product/${productCode}.json`, showData);
+
 };
 
 //MAIN DOM ELEMENTS
@@ -323,14 +388,23 @@ sendButton.addEventListener('click', () => {
 })
 
 quantityButton.addEventListener('click', () => {
-    selectClicked++
-    if (!(selectClicked % 2 == 0)) {
-        quantitySelect.classList.remove('quantityTitle__closed');
-        quantitySelect.classList.add('quantityTitle__opened');
+    if (quantity2) {
+        if (selectClicked == false) {
+            quantitySelect.classList.remove('quantityTitle__closed');
+            quantitySelect.classList.add('quantityTitle__opened');
+            selectClicked = true;
+            console.log(selectClicked);
+        } else {
+            quantitySelect.classList.add('quantityTitle__closed');
+            quantitySelect.classList.remove('quantityTitle__opened');
+            selectClicked = false;
+            console.log(selectClicked);
+        }
     } else {
-        quantitySelect.classList.add('quantityTitle__closed');
         quantitySelect.classList.remove('quantityTitle__opened');
+        quantitySelect.classList.add('quantityTitle__closed');
     }
+
 })
 
 quantity1.addEventListener('click', () => {
@@ -345,6 +419,7 @@ quantity1.addEventListener('click', () => {
     quantity2.textContent = secondQuantity;
     quantitySelect.classList.add('quantityTitle__closed');
     quantitySelect.classList.remove('quantityTitle__opened');
+    selectClicked = false;
     for (let i = 0; i <= nutriments.length - 1; i++) {
         let output = document.querySelectorAll('#infoOutput');
         for (let j = 0; j <= output.length - 1; j++) {
@@ -366,6 +441,7 @@ quantity2.addEventListener('click', () => {
     quantity2.textContent = secondQuantity;
     quantitySelect.classList.add('quantityTitle__closed');
     quantitySelect.classList.remove('quantityTitle__opened');
+    selectClicked = false;
     for (let i = 0; i <= nutriments.length - 1; i++) {
         let output = document.querySelectorAll('#infoOutput');
         for (let j = 0; j <= output.length - 1; j++) {
@@ -380,19 +456,21 @@ quantity2.addEventListener('click', () => {
 })
 
 ingredientsButton.addEventListener('click', () => {
-    ingredientsClicked++
-    if (!(ingredientsClicked % 2 == 0)) {
+    if (ingredientsClicked == false) {
+        ingredientsSelect.classList.add('ingredientsSelect__closed');
+        ingredientsSelect.classList.remove('ingredientsSelect__opened');
+        ingredientsClicked = true;
+    } else {
         ingredientsSelect.classList.remove('ingredientsSelect__closed');
         ingredientsSelect.classList.add('ingredientsSelect__opened');
+        ingredientsClicked = false;
         main.scrollTo({
             top: 800,
             left: 0,
             behavior: "smooth"
         })
-    } else {
-        ingredientsSelect.classList.add('ingredientsSelect__closed');
-        ingredientsSelect.classList.remove('ingredientsSelect__opened');
     }
 })
 
 //8422904015553
+//8436008521063
