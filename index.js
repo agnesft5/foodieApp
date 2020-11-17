@@ -222,7 +222,7 @@ function showData(data) {
                 tag__title.classList.add('simpleText', 'capitalize')
 
                 let tagIconCol = document.createElement('div');
-                tagIconCol.classList.add('col-6', 'macroCard__align');
+                tagIconCol.classList.add('col-4', 'macroCard__align');
 
                 tagCard.setAttribute('id', `${tagTitle}`);
 
@@ -584,7 +584,7 @@ tagsButton.addEventListener('click', () => {
         tagsSelect.classList.add('tagsSelect__opened');
         tagsClicked = false;
         main.scrollTo({
-            top: 800,
+            top: 1000,
             left: 0,
             behavior: "smooth"
         })
