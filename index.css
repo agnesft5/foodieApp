@@ -335,14 +335,14 @@ canvas{
 }
 .seventh__title{
     font-family: 'Alegreya Sans', sans-serif;
-    font-size: 1.25rem;
+    font-size: 1.35rem;
     color: #167663;
     text-shadow: 1px 1px white;
     font-weight: 600;
 }
 .seventh__subTitle{
     font-family: 'Alegreya Sans', sans-serif;
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: black;
     font-weight: 400;
 }
@@ -379,7 +379,7 @@ canvas{
     position: relative;
     top: 40vh;
     text-align: left;
-    border-bottom: 1.5px solid #167663;
+    /* border-bottom: 1.5px solid #167663; */
     width: 93%;
     margin: 0 auto;
     height: 4vh;
@@ -394,12 +394,13 @@ canvas{
     height: 1.5px;
     border-bottom: 2px solid #167663;
     width: 100%;
+    display: none;
 }
 .quantityTitle__opened{
     position: relative;
     top: 40vh;
     text-align: left;
-    border-bottom: 1.5px solid #167663;
+    /* border-bottom: 1.5px solid #167663; */
     width: 93%;
     margin: 0 auto;
     height: 8vh;
@@ -417,7 +418,7 @@ canvas{
 }
 .quantity__title, .ingredients__title, .tags__title{
     font-family: 'Alegreya Sans', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #167663;
     margin: 0 !important;
 }
@@ -455,6 +456,7 @@ canvas{
     height: 1.5px;
     border-bottom: 2px solid #167663;
     width: 100%;
+    display: none;
 }
 .tagsSelect__opened{
     position: relative;
