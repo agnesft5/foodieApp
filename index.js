@@ -11,11 +11,22 @@ let macros = [
     { title: "Saturated fat", name: "saturated-fat", icon: `<i class="fas fa-bacon icon__size"></i>` },
     { title: "Salt", name: "salt", icon: `<i class="fas fa-cube icon__size"></i>` }
 ]
-// let tagIcons = [
-//     {'palm oil free':``},
-//     {'vegeterian':`<i class="fas fa-leaf icon__size"></i>`},
-//     {'vegan':`<i class="fas fa-seedling icon__size"></i>`},
-// ]
+let tagIcons =
+{
+    'palm oil free': `./assets/set/transfats-free.png`,
+    'gluten free': `./assets/set/gluten-free.png`,
+    'vegan': `./assets/set/vegan.png`,
+    'sugar free': `./assets/set/sugar-free.png`,
+    'chocolate free': `./assets/set/chocolate-free.png`,
+    'eggs free': `./assets/set/eggs-free.png`,
+    'honey free': `./assets/set/honey-free.png`,
+    'lactose free': `./assets/set/lactose-free.png`,
+    'no gmo': `./assets/set/no-gmo.png`,
+    'nuts free': `./assets/set/nuts-free.png`,
+    'soya free': `./assets/set/soya-free.png`,
+    'strawberry free': `./assets/set/strawberry-free.png`, 'transfats free': `/assets/set/transfats-free.png`
+}
+
 let nutriments = [];
 let firstQuantity;
 let secondQuantity;
@@ -153,13 +164,6 @@ function showData(data) {
         }
 
         //ingredients
-
-        // let ingredientsDebug = objProduct.product.ingredients_debug;
-        // for (let i = 0; i <= ingredientsDebug.length - 1; i++) {
-        //     ingredients.push(ingredientsDebug[i]);
-        // }
-        // ingredientsText.textContent = ingredients.join("");
-
         if (objProduct.product.ingredients_text) {
             ingredientsText.textContent = objProduct.product.ingredients_text;
         } else if (objProduct.product.ingredients_text_es) {
@@ -169,20 +173,46 @@ function showData(data) {
         }
 
         //tags
-        tags = objProduct.product.ingredients_analysis_tags
-        if(tags){
-            for (let i = 0; i <= tags.length -1; i++){
+        let tags = []
+        if (objProduct.product.labels_tags != undefined && objProduct.product.labels_tags.length > 0) {
+            for (let i = 0; i <= objProduct.product.labels_tags.length - 1; i++) {
+                tags.push(objProduct.product.labels_tags[i]);
+            }
+        }
+
+        if (objProduct.product.labels_hierarchy != undefined && objProduct.product.labels_hierarchy.length > 0) {
+            for (let i = 0; i <= objProduct.product.labels_hierarchy.length - 1; i++) {
+                tags.push(objProduct.product.labels_hierarchy[i]);
+            }
+        }
+
+        if (objProduct.product.ingredients_analysis_tags != undefined && objProduct.product.ingredients_analysis_tags.length > 0) {
+            for (let i = 0; i <= objProduct.product.ingredients_analysis_tags.length - 1; i++) {
+                tags.push(objProduct.product.ingredients_analysis_tags[i]);
+            }
+        }
+
+        for (let i = 0; i <= tags.length - 1; i++) {
+            for (let j = 0; j <= tags.length - 1; j++) {
+                if (tags[i] == tags[j] && i != j) {
+                    tags.splice(tags.indexOf(tags[i]),1)
+                }
+            }
+        }
+
+        if (tags !== undefined) {
+            for (let i = 0; i <= tags.length - 1; i++) {
                 let tag = tags[i]
                 let correctedTag = [];
-                for (let j = 0; j <= tag.length -1; j++){
-                    if([j]>2){
+                for (let j = 0; j <= tag.length - 1; j++) {
+                    if ([j] > 2) {
                         correctedTag.push(tag[j])
                     }
                 }
-            correctedTags.push(correctedTag.join('').split('-').join(' '));
+                correctedTags.push(correctedTag.join('').split('-').join(' '));
             }
             console.log(correctedTags);
-            for ( i = 0; i<= correctedTags.length -1; i++){
+            for (i = 0; i <= correctedTags.length - 1; i++) {
                 let tagTitle = correctedTags[i];
                 let tagCard = document.createElement('div');
                 tagCard.classList.add('tags__card', 'row');
@@ -190,25 +220,44 @@ function showData(data) {
                 let tag__title = document.createElement('p');
                 tag__title.textContent = tagTitle;
                 tag__title.classList.add('simpleText', 'capitalize')
-                
+
                 let tagIconCol = document.createElement('div');
-                tagIconCol.classList.add('col-2', 'macroCard__align');
-                // tagIconCol.innerHTML = ;
-                
+                tagIconCol.classList.add('col-6', 'macroCard__align');
+
+                tagCard.setAttribute('id', `${tagTitle}`);
+
+                for (let k = 0; k <= Object.keys(tagIcons).length - 1; k++) {
+                    let hideCards = []
+                    if (tagTitle == Object.keys(tagIcons)[k]) {
+                        let img = document.createElement('img');
+                        img.setAttribute('src', tagIcons[Object.keys(tagIcons)[k]])
+                        img.classList.add('tagFreeImg');
+                        tagIconCol.appendChild(img);
+                    } else if (Object.keys(tagIcons).indexOf(tagTitle) == -1) {
+                        hideCards.push(tagTitle);
+                        for (let m = 0; m <= hideCards.length - 1; m++) {
+                            document.getElementById(`${hideCards[m]}`).classList.add('d-none');
+                        }
+                    } else {
+                        console.log('Looking for coincidences')
+                    }
+                }
+
+
                 let tagTitleCol = document.createElement('div');
-                tagTitleCol.classList.add('col-4', 'macroCard__align');
+                tagTitleCol.classList.add('col-6', 'macroCard__align');
 
                 tagCard.appendChild(tagIconCol);
                 tagCard.appendChild(tagTitleCol);
 
                 tagTitleCol.appendChild(tag__title);
-                
+
                 tagsContainer.appendChild(tagCard);
             }
 
-            
-        }else{
 
+        } else {
+            tagsSelect.classList.add('d-none');
         }
 
         main.scrollTo({
@@ -525,7 +574,7 @@ ingredientsButton.addEventListener('click', () => {
     }
 })
 
-tagsButton.addEventListener('click',()=>{
+tagsButton.addEventListener('click', () => {
     if (tagsClicked == false) {
         tagsSelect.classList.add('tagsSelect__closed');
         tagsSelect.classList.remove('tagsSelect__opened');

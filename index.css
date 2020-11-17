@@ -363,6 +363,7 @@ canvas{
     justify-content: center;
     align-items: center;
     height: 100%;
+    align-self: center;
 }
 .icon__size{
     font-size: x-large;
@@ -447,7 +448,7 @@ canvas{
 }
 .tagsSelect__closed{
     border-bottom: none;
-    top: 44vh;
+    top: 46vh;
     background-color: rgb(217, 241, 228);
 }
 .tags__separator{
@@ -457,7 +458,7 @@ canvas{
 }
 .tagsSelect__opened{
     position: relative;
-    top: 44vh;
+    top: 46vh;
     text-align: left;
     width: 93%;
     margin: 0 auto;
@@ -478,4 +479,8 @@ canvas{
 }
 .capitalize{
     text-transform: capitalize;
+}
+.tagFreeImg{
+    width: 90px;
+    border-radius: 50%;
 }
