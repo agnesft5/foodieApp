@@ -13,18 +13,36 @@ let macros = [
 ]
 let tagIcons =
 {
-    'palm oil free': `./assets/set/transfats-free.png`,
-    'gluten free': `./assets/set/gluten-free.png`,
-    'vegan': `./assets/set/vegan.png`,
-    'sugar free': `./assets/set/sugar-free.png`,
-    'chocolate free': `./assets/set/chocolate-free.png`,
-    'eggs free': `./assets/set/eggs-free.png`,
-    'honey free': `./assets/set/honey-free.png`,
-    'lactose free': `./assets/set/lactose-free.png`,
-    'no gmo': `./assets/set/no-gmo.png`,
-    'nuts free': `./assets/set/nuts-free.png`,
-    'soya free': `./assets/set/soya-free.png`,
-    'strawberry free': `./assets/set/strawberry-free.png`, 'transfats free': `/assets/set/transfats-free.png`
+    'palm oil free': `./assets/tag-set/transfats-free.png`,
+    'gluten free': `./assets/tag-set/gluten-free.png`,
+    'vegan': `./assets/tag-set/vegan.png`,
+    'sugar free': `./assets/tag-set/sugar-free.png`,
+    'chocolate free': `./assets/tag-set/chocolate-free.png`,
+    'eggs free': `./assets/tag-set/eggs-free.png`,
+    'honey free': `./assets/tag-set/honey-free.png`,
+    'lactose free': `./assets/tag-set/lactose-free.png`,
+    'no gmo': `./assets/tag-set/no-gmo.png`,
+    'nuts free': `./assets/tag-set/nuts-free.png`,
+    'soya free': `./assets/tag-set/soya-free.png`,
+    'strawberry free': `./assets/tag-set/strawberry-free.png`, 'transfats free': `/assets/set/transfats-free.png`
+}
+
+let allergenIcons =
+{
+    'celery': `./assets/allergen-set/celery.png`,
+    'crustacean': `./assets/allergen-set/crustacean.png`,
+    'eggs': `./assets/allergen-set/eggs.png`,
+    'fish': `./assets/allergen-set/fish.png`,
+    'gluten': `./assets/allergen-set/gluten.png`,
+    'lupins': `./assets/allergen-set/lupins.png`,
+    'milk': `./assets/allergen-set/milk.png`,
+    'mustard': `./assets/allergen-set/mustard.png`,
+    'nuts': `./assets/allergen-set/nuts.png`,
+    'peanuts': `./assets/allergen-set/peanuts.png`,
+    'sesame': `./assets/allergen-set/sesame.png`,
+    'shellfish': `./assets/allergen-set/shellfish.png`,
+    'soya': `./assets/allergen-set/soya.png`,
+    'sulphite': `./assets/allergen-set/sulphite.png`
 }
 
 let nutriments = [];
@@ -35,9 +53,10 @@ let servingQuantity;
 let selectClicked = false;
 let ingredients = [];
 let ingredientsClicked = false;
-let tags = [];
 let correctedTags = [];
+let correctedAllergens = [];
 let tagsClicked = false;
+let allergensClicked = false;
 let products = [];
 
 //GET
@@ -104,7 +123,6 @@ function showData(data) {
             info.textContent = `${productValue * (quantity1.textContent / 100).toFixed(2)} ${productUnit}`;
 
             //rate col
-            //this col is still empty in case I want to add something else
             let rateCol = document.createElement('div');
             rateCol.classList.add('col-2', 'macroCard__align');
             let rate = document.createElement('div');
@@ -195,7 +213,7 @@ function showData(data) {
         for (let i = 0; i <= tags.length - 1; i++) {
             for (let j = 0; j <= tags.length - 1; j++) {
                 if (tags[i] == tags[j] && i != j) {
-                    tags.splice(tags.indexOf(tags[i]),1)
+                    tags.splice(tags.indexOf(tags[i]), 1)
                 }
             }
         }
@@ -211,8 +229,19 @@ function showData(data) {
                 }
                 correctedTags.push(correctedTag.join('').split('-').join(' '));
             }
+
+            let hideTagCards = [];
+            for (let i = 0; i <= correctedTags.length - 1; i++) {
+                if (Object.keys(tagIcons).indexOf(correctedTags[i]) == -1) {
+                    hideTagCards.push(correctedTags[i]);
+                }
+            }
+            for (let i = 0; i <= hideTagCards.length - 1; i++) {
+                correctedTags.splice(correctedTags.indexOf(hideTagCards[i]), 1)
+            }
             console.log(correctedTags);
-            for (i = 0; i <= correctedTags.length - 1; i++) {
+
+            for (let i = 0; i <= correctedTags.length - 1; i++) {
                 let tagTitle = correctedTags[i];
                 let tagCard = document.createElement('div');
                 tagCard.classList.add('tags__card', 'row');
@@ -227,22 +256,15 @@ function showData(data) {
                 tagCard.setAttribute('id', `${tagTitle}`);
 
                 for (let k = 0; k <= Object.keys(tagIcons).length - 1; k++) {
-                    let hideCards = []
                     if (tagTitle == Object.keys(tagIcons)[k]) {
                         let img = document.createElement('img');
                         img.setAttribute('src', tagIcons[Object.keys(tagIcons)[k]])
                         img.classList.add('tagFreeImg');
                         tagIconCol.appendChild(img);
-                    } else if (Object.keys(tagIcons).indexOf(tagTitle) == -1) {
-                        hideCards.push(tagTitle);
-                        for (let m = 0; m <= hideCards.length - 1; m++) {
-                            document.getElementById(`${hideCards[m]}`).classList.add('d-none');
-                        }
                     } else {
                         console.log('Looking for coincidences')
                     }
                 }
-
 
                 let tagTitleCol = document.createElement('div');
                 tagTitleCol.classList.add('col-6', 'macroCard__align');
@@ -259,6 +281,109 @@ function showData(data) {
         } else {
             tagsSelect.classList.add('d-none');
         }
+
+        //allergens & traces
+        let allergens = []
+        if (objProduct.product.allergens_tags != undefined && objProduct.product.allergens_tags.length > 0) {
+            for (let i = 0; i <= objProduct.product.allergens_tags.length - 1; i++) {
+                allergens.push(objProduct.product.allergens_tags[i]);
+            }
+        }
+
+        if (objProduct.product.allergens_hierarchy != undefined && objProduct.product.allergens_hierarchy.length > 0) {
+            for (let i = 0; i <= objProduct.product.allergens_hierarchy.length - 1; i++) {
+                allergens.push(objProduct.product.allergens_hierarchy[i]);
+            }
+        }
+
+        if (objProduct.product.traces_tags != undefined && objProduct.product.traces_tags.length > 0) {
+            for (let i = 0; i <= objProduct.product.traces_tags.length - 1; i++) {
+                allergens.push(objProduct.product.traces_tags[i]);
+            }
+        }
+
+        if (objProduct.product.traces_hierarchy != undefined && objProduct.product.traces_hierarchy.length > 0) {
+            for (let i = 0; i <= objProduct.product.traces_hierarchy.length - 1; i++) {
+                allergens.push(objProduct.product.traces_hierarchy[i]);
+            }
+        }
+
+        for (let i = 0; i <= allergens.length - 1; i++) {
+            for (let j = 0; j <= allergens.length - 1; j++) {
+                if (allergens[i] == allergens[j] && i != j) {
+                    allergens.splice(allergens.indexOf(allergens[i]), 1)
+                }
+            }
+        }
+
+        console.log(allergens);
+
+        if (allergens !== undefined) {
+            for (let i = 0; i <= allergens.length - 1; i++) {
+                let allergen = allergens[i]
+                let correctedAllergen = [];
+                for (let j = 0; j <= allergen.length - 1; j++) {
+                    if ([j] > 2) {
+                        correctedAllergen.push(allergen[j])
+                    }
+                }
+                correctedAllergens.push(correctedAllergen.join('').split('-').join(' '));
+            }
+            let hideAllergenCards = [];
+            for (let i = 0; i <= correctedAllergens.length - 1; i++) {
+                if (Object.keys(allergenIcons).indexOf(correctedAllergens[i]) == -1) {
+                    hideAllergenCards.push(correctedAllergens[i]);
+                }
+            }
+            for (let i = 0; i <= hideAllergenCards.length - 1; i++) {
+                correctedAllergens.splice(correctedAllergens.indexOf(hideAllergenCards[i]), 1)
+            }
+            console.log(correctedAllergens);
+
+
+            for (i = 0; i <= correctedAllergens.length - 1; i++) {
+                let allergenTitle = correctedAllergens[i];
+                //let allergensCard = document.createElement('div');
+                // allergensCard.classList.add('allergens__card', 'row');
+                allergensContainer.classList.add('allergens__card', 'row')
+
+                //let allergen__title = document.createElement('p');
+                //allergen__title.textContent = allergenTitle;
+                //allergen__title.classList.add('simpleText', 'capitalize')
+
+                let allergenIconCol = document.createElement('div');
+                allergenIconCol.classList.add('col-4');
+
+                allergenIconCol.setAttribute('id', `${allergenTitle}`);
+
+                for (let k = 0; k <= Object.keys(allergenIcons).length - 1; k++) {
+                    if (allergenTitle == Object.keys(allergenIcons)[k]) {
+                        let img = document.createElement('img');
+                        img.setAttribute('src', allergenIcons[Object.keys(allergenIcons)[k]])
+                        img.classList.add('allergenImg');
+                        allergenIconCol.appendChild(img);
+                    } else {
+                        console.log('Looking for coincidences')
+                    }
+                }
+
+
+                //let allergenTitleCol = document.createElement('div');
+                //allergenTitleCol.classList.add('col-4', 'macroCard__align');
+
+                //allergensCard.appendChild(allergenIconCol);
+                //allergensCard.appendChild(allergenTitleCol);
+                //allergenTitleCol.appendChild(allergen__title);
+
+                allergensContainer.appendChild(allergenIconCol);
+            }
+
+
+
+        } else {
+            allergensSelect.classList.add('d-none');
+        }
+
 
         main.scrollTo({
             top: 800,
@@ -315,6 +440,7 @@ let quantity2 = document.querySelector('#quantity2');
 let ingredientsCard = document.querySelector('#ingredientsCard');
 let ingredientsText = document.querySelector('#ingredientsText');
 let tagsContainer = document.querySelector('#tagsContainer');
+let allergensContainer = document.querySelector('#allergensContainer');
 let footer = document.querySelector("#footer");
 
 // BUTTONS
@@ -329,6 +455,9 @@ let notWorking = document.querySelector('#notWorking');
 let quantityButton = document.querySelector('#quantityIcon');
 let ingredientsButton = document.querySelector('#ingredientsIcon');
 let tagsButton = document.querySelector('#tagsIcon');
+let tagsSelect = document.querySelector('#tagsSelect')
+let allergensButton = document.querySelector('#allergensIcon');
+let allergensSelect = document.querySelector('#allergensSelect')
 
 firstBullet.addEventListener('click', () => {
     third.classList.add('d-none');
@@ -591,7 +720,24 @@ tagsButton.addEventListener('click', () => {
     }
 })
 
+allergensButton.addEventListener('click', () => {
+    if (allergensClicked == false) {
+        allergensSelect.classList.add('tagsSelect__closed');
+        allergensSelect.classList.remove('tagsSelect__opened');
+        allergensClicked = true;
+    } else {
+        allergensSelect.classList.remove('tagsSelect__closed');
+        allergensSelect.classList.add('tagsSelect__opened');
+        allergensClicked = false;
+        main.scrollTo({
+            top: 1500,
+            left: 0,
+            behavior: "smooth"
+        })
+    }
+})
 
 
 //8422904015553
 //8436008521063
+//8410300349051

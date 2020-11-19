@@ -375,7 +375,7 @@ canvas{
     color: black;
     margin: 0 !important;
 }
-.quantityTitle__closed, .ingredientsSelect__closed, .tagsSelect__closed{
+.quantityTitle__closed, .ingredientsSelect__closed, .tagsSelect__closed, .allergenSelect__closed{
     position: relative;
     top: 40vh;
     text-align: left;
@@ -416,7 +416,7 @@ canvas{
     overflow: hidden;
     background-color: rgb(217, 241, 228);
 }
-.quantity__title, .ingredients__title, .tags__title{
+.quantity__title, .ingredients__title, .tags__title, .allergens__title{
     font-family: 'Alegreya Sans', sans-serif;
     font-size: 1.2rem;
     color: #167663;
@@ -485,4 +485,44 @@ canvas{
 .tagFreeImg{
     width: 60px;
     border-radius: 50%;
+}
+.allergensSelect__closed{
+    border-bottom: none;
+    top: 48vh;
+    background-color: rgb(217, 241, 228);
+}
+.allergens__separator{
+    height: 1.5px;
+    border-bottom: 2px solid #167663;
+    width: 100%;
+    display: none;
+}
+.allergensSelect__opened{
+    position: relative;
+    top: 48vh;
+    text-align: left;
+    width: 93%;
+    margin: 0 auto;
+    min-height: fit-content;
+    overflow: hidden;
+    background-color: rgb(217, 241, 228);
+}
+.allergens__card{
+    border-radius: .75rem;
+    border: 1px solid rgba(180, 228, 201, .3);
+    background-color: rgba(250, 250, 250, .5);
+    width: 100%;
+    margin: 3% auto;
+    display: flex;
+    /* justify-content: center;
+    align-items: center; */
+    height: fit-content;
+}
+.capitalize{
+    text-transform: capitalize;
+}
+.allergenImg{
+    width: 75px;
+    margin: 7% !important;
+    /*border-radius: 50%;*/
 }
