@@ -387,7 +387,7 @@ canvas{
 }
 .ingredientsSelect__closed{
     border-bottom: none;
-    top: 44vh;
+    top: 41vh;
     background-color: rgb(217, 241, 228);
 }
 .ingredients__separator{
@@ -408,7 +408,7 @@ canvas{
 }
 .ingredientsSelect__opened{
     position: relative;
-    top: 44vh;
+    top: 41vh;
     text-align: left;
     width: 93%;
     margin: 0 auto;
@@ -449,7 +449,7 @@ canvas{
 }
 .tagsSelect__closed{
     border-bottom: none;
-    top: 46vh;
+    top: 43vh;
     background-color: rgb(217, 241, 228);
 }
 .tags__separator{
@@ -460,7 +460,7 @@ canvas{
 }
 .tagsSelect__opened{
     position: relative;
-    top: 46vh;
+    top: 43vh;
     text-align: left;
     width: 93%;
     margin: 0 auto;
@@ -488,7 +488,7 @@ canvas{
 }
 .allergensSelect__closed{
     border-bottom: none;
-    top: 48vh;
+    top: 45vh;
     background-color: rgb(217, 241, 228);
 }
 .allergens__separator{
@@ -499,7 +499,7 @@ canvas{
 }
 .allergensSelect__opened{
     position: relative;
-    top: 48vh;
+    top: 45vh;
     text-align: left;
     width: 93%;
     margin: 0 auto;
@@ -522,7 +522,7 @@ canvas{
     text-transform: capitalize;
 }
 .allergenImg{
-    width: 75px;
-    margin: 7% !important;
-    /*border-radius: 50%;*/
+    width: 60px;
+    /* margin: 7% !important; */
+    border-radius: 50%;
 }

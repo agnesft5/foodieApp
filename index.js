@@ -29,20 +29,20 @@ let tagIcons =
 
 let allergenIcons =
 {
-    'celery': `./assets/allergen-set/celery.png`,
-    'crustacean': `./assets/allergen-set/crustacean.png`,
-    'eggs': `./assets/allergen-set/eggs.png`,
-    'fish': `./assets/allergen-set/fish.png`,
-    'gluten': `./assets/allergen-set/gluten.png`,
-    'lupins': `./assets/allergen-set/lupins.png`,
-    'milk': `./assets/allergen-set/milk.png`,
-    'mustard': `./assets/allergen-set/mustard.png`,
-    'nuts': `./assets/allergen-set/nuts.png`,
-    'peanuts': `./assets/allergen-set/peanuts.png`,
-    'sesame': `./assets/allergen-set/sesame.png`,
-    'shellfish': `./assets/allergen-set/shellfish.png`,
-    'soya': `./assets/allergen-set/soya.png`,
-    'sulphite': `./assets/allergen-set/sulphite.png`
+    'celery': `./assets/noname-allergen-set/celery.png`,
+    'crustacean': `./assets/noname-allergen-set/crustacean.png`,
+    'eggs': `./assets/noname-allergen-set/eggs.png`,
+    'fish': `./assets/noname-allergen-set/fish.png`,
+    'gluten': `./assets/noname-allergen-set/gluten.png`,
+    'lupins': `./assets/noname-allergen-set/lupins.png`,
+    'milk': `./assets/noname-allergen-set/milk.png`,
+    'mustard': `./assets/noname-allergen-set/mustard.png`,
+    'nuts': `./assets/noname-allergen-set/nuts.png`,
+    'peanuts': `./assets/noname-allergen-set/peanuts.png`,
+    'sesame': `./assets/noname-allergen-set/sesame.png`,
+    'shellfish': `./assets/noname-allergen-set/shellfish.png`,
+    'soya': `./assets/noname-allergen-set/soya.png`,
+    'sulphite': `./assets/noname-allergen-set/sulphite.png`
 }
 
 let nutriments = [];
@@ -343,16 +343,16 @@ function showData(data) {
 
             for (i = 0; i <= correctedAllergens.length - 1; i++) {
                 let allergenTitle = correctedAllergens[i];
-                //let allergensCard = document.createElement('div');
-                // allergensCard.classList.add('allergens__card', 'row');
-                allergensContainer.classList.add('allergens__card', 'row')
+                let allergensCard = document.createElement('div');
+                allergensCard.classList.add('allergens__card', 'row');
+                //allergensContainer.classList.add('allergens__card', 'row')
 
-                //let allergen__title = document.createElement('p');
-                //allergen__title.textContent = allergenTitle;
-                //allergen__title.classList.add('simpleText', 'capitalize')
+                let allergen__title = document.createElement('p');
+                allergen__title.textContent = allergenTitle;
+                allergen__title.classList.add('simpleText', 'capitalize')
 
                 let allergenIconCol = document.createElement('div');
-                allergenIconCol.classList.add('col-4');
+                allergenIconCol.classList.add('col-4', 'macroCard__align');
 
                 allergenIconCol.setAttribute('id', `${allergenTitle}`);
 
@@ -368,14 +368,14 @@ function showData(data) {
                 }
 
 
-                //let allergenTitleCol = document.createElement('div');
-                //allergenTitleCol.classList.add('col-4', 'macroCard__align');
+                let allergenTitleCol = document.createElement('div');
+                allergenTitleCol.classList.add('col-6', 'macroCard__align');
 
-                //allergensCard.appendChild(allergenIconCol);
-                //allergensCard.appendChild(allergenTitleCol);
-                //allergenTitleCol.appendChild(allergen__title);
+                allergensCard.appendChild(allergenIconCol);
+                allergensCard.appendChild(allergenTitleCol);
+                allergenTitleCol.appendChild(allergen__title);
 
-                allergensContainer.appendChild(allergenIconCol);
+                allergensContainer.appendChild(allergensCard);
             }
 
 
