@@ -53,11 +53,13 @@ let servingQuantity;
 let selectClicked = false;
 let ingredients = [];
 let ingredientsClicked = false;
-let correctedTags = [];
-let correctedAllergens = [];
 let tagsClicked = false;
 let allergensClicked = false;
+let alternativesClicked = false;
 let products = [];
+let objProduct;
+let tags;
+let allergens;
 
 //GET
 function httpGet(theUrl, callback) {
@@ -69,16 +71,19 @@ function httpGet(theUrl, callback) {
         console.log("checkpoint");
     }
     xmlHttp.open("GET", theUrl, false);
-    xmlHttp.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+    xmlHttp.setRequestHeader("Content-type", "application/json", "charset=utf-8", "X-Requested-With", "XMLHttpRequest")
     xmlHttp.send();
 };
 
 //SHOW DATA
 function showData(data) {
     objProduct = JSON.parse(data);
-    console.log(objProduct);
-    console.log(objProduct.product);
+    // console.log(objProduct);
+    // console.log(objProduct.product);
     if (objProduct.status_verbose == 'product found') {
+        //global scope vars
+        let correctedAllergens = [];
+        let correctedTags = [];
         //picture
         foodImg.setAttribute('src', objProduct.product.image_url);
         //name
@@ -164,9 +169,6 @@ function showData(data) {
             if (objProduct.product.serving_quantity && objProduct.product.serving_quantity != percent) {
                 servingQuantity = objProduct.product.serving_quantity;
                 //NO WATER
-            } else if (objProduct.product.serving_quantity && objProduct.product.serving_quantity != percent) {
-                servingQuantity = objProduct.product.product_quantity;
-                //WEIGHT
             } else {
                 servingQuantity = objProduct.product.product_quantity;
             }
@@ -191,7 +193,7 @@ function showData(data) {
         }
 
         //tags
-        let tags = []
+        tags = []
         if (objProduct.product.labels_tags != undefined && objProduct.product.labels_tags.length > 0) {
             for (let i = 0; i <= objProduct.product.labels_tags.length - 1; i++) {
                 tags.push(objProduct.product.labels_tags[i]);
@@ -283,7 +285,7 @@ function showData(data) {
         }
 
         //allergens & traces
-        let allergens = []
+        allergens = []
         if (objProduct.product.allergens_tags != undefined && objProduct.product.allergens_tags.length > 0) {
             for (let i = 0; i <= objProduct.product.allergens_tags.length - 1; i++) {
                 allergens.push(objProduct.product.allergens_tags[i]);
@@ -384,31 +386,136 @@ function showData(data) {
             allergensSelect.classList.add('d-none');
         }
 
-
         main.scrollTo({
             top: 800,
             left: 0,
             behavior: "smooth"
         })
 
-        // let productObject = { 'name': objProduct.product.product_name, 'code': objProduct.product.id, 'img': objProduct.product.image_url };
-        // let productsArray = [];
+        // let categories = [];
+        let category;
+        let correctedCategory = [];
+        let cat;
+        if (objProduct.product.compared_to_category) {
+            category = objProduct.product.compared_to_category;
+            // }else if (objProduct.product.categories_tags){
+            //     categories = objProduct.product.categories_tags;
+            // }else if (objProduct.product.categories_hierarchy){
+            //     categories = objProduct.product.categories_hierarchy
+        } else {
+            cat = objProduct.product.product_name;
+        }
 
-        // if (localStorage.getItem('products')){
-        //     products.push(JSON.parse(localStorage.getItem('products')))
-        // }
-        // localStorage.setItem('products', JSON.stringify(productsArray));
+        for (let n = 0; n <= category.length - 1; n++) {
+            if (n > 2) {
+                correctedCategory.push(category[n]);
+            }
+        }
+        cat = correctedCategory.join('').split('-').join(' ');
+        console.log(cat);
+        setTimeout(() => {
+            getAlternatives(cat);
+            cat = undefined;
+        }, 1000);
 
     } else {
 
     }
 }
 
-//CHANGE LINK
+function showAlternatives(data) {
+    let objAlternatives = JSON.parse(data);
+    //console.log(objAlternatives.products);
+    let alternatives = objAlternatives.products;
+    for (let i = 0; i <= alternatives.length - 1; i++) {
+        //show just 9
+        if (i < 9) {
+            let alternative = alternatives[i];
+            let id = alternative.id;
+            //container
+            alternativesContainer.classList.add('row', 'm-0', 'p-0');
+            //card
+            let altCard = document.createElement('div');
+            altCard.classList.add('col-3', 'alternative__card', 'p-0', 'altCard');
+            altCard.setAttribute('id', id);
+            //card first section
+            let cardImgContainer = document.createElement('div');
+            cardImgContainer.classList.add('row', 'm-0', 'p-0', 'altCard');
+            cardImgContainer.setAttribute('id', id);
+            let cardImgCol = document.createElement('div');
+            cardImgCol.classList.add('col-12', 'alternative__align', 'm-0', 'p-0', 'altCard');
+            cardImgCol.setAttribute('id', id);
+            //card second section
+            let cardTitleContainer = document.createElement('div');
+            cardTitleContainer.classList.add('row', 'm-0', 'p-0', 'altCard');
+            cardTitleContainer.setAttribute('id', id);
+            let cardTitleCol = document.createElement('div');
+            cardTitleCol.classList.add('col-12', 'alternative__align', 'm-0', 'p-0', 'altCard');
+            cardTitleCol.setAttribute('id', id);
+            //title
+            let alternativeTitle = alternative.product_name;
+            let alternative__title = document.createElement('p');
+            alternative__title.classList.add('simpleText', 'capitalize', 'alternative__align', 'text-center', 'm-3', 'alternative__fontSize', 'altCard');
+            alternative__title.textContent = alternativeTitle;
+            alternative__title.setAttribute('id', id);
+            //img
+            let alternativeImgUrl = alternative.image_url;
+            let alternativeImg = document.createElement('img');
+            alternativeImg.setAttribute('src', alternativeImgUrl);
+            alternativeImg.classList.add('alternative__img', 'altCard');
+            alternativeImg.setAttribute('id', id);
+            //appends
+            cardImgCol.appendChild(alternativeImg);
+            cardTitleCol.appendChild(alternative__title);
+            cardImgContainer.appendChild(cardImgCol);
+            cardTitleContainer.appendChild(cardTitleCol);
+            altCard.appendChild(cardImgContainer);
+            altCard.appendChild(cardTitleContainer)
+            alternativesContainer.appendChild(altCard);
+
+        }
+
+    }
+
+}
+
+//CHANGE PRODUCT VIEW
+window.onclick = e => {
+    let element = e.target;
+    let id = element.getAttribute('id');
+    if (id != undefined || id != null || id != "") {
+        if (element.classList.contains('altCard')) {
+            tags = [];
+            allergens = [];
+            seventh.classList.add('d-none');
+            cardsContainer.innerHTML = "";
+            allergensContainer.innerHTML = "";
+            alternativesContainer.innerHTML = "";
+            tagsContainer.innerHTML = "";
+            sixth.classList.remove('d-none');
+            changeLink(id);
+            setTimeout(() => {
+                sixth.classList.add('d-none');
+                seventh.classList.remove('d-none');
+            }, 3000);
+        } else {
+            console.log("Not an alternative product card");
+        }
+    } else {
+        console.log('Id not found')
+    }
+}
+
+//PRODUCT LINK
 function changeLink(productCode) {
     httpGet(`https://cors-anywhere.herokuapp.com/https://world.openfoodfacts.org/api/v0/product/${productCode}.json`, showData);
 
 };
+
+//ALTERNATIVES LINK
+function getAlternatives(productName) {
+    httpGet(`https://cors-anywhere.herokuapp.com/https://world.openfoodfacts.org/category/${productName}.json`, showAlternatives)
+}
 
 //MAIN DOM ELEMENTS
 let body = document.querySelector('body');
@@ -441,6 +548,7 @@ let ingredientsCard = document.querySelector('#ingredientsCard');
 let ingredientsText = document.querySelector('#ingredientsText');
 let tagsContainer = document.querySelector('#tagsContainer');
 let allergensContainer = document.querySelector('#allergensContainer');
+let alternativesContainer = document.querySelector('#alternativesContainer');
 let footer = document.querySelector("#footer");
 
 // BUTTONS
@@ -457,7 +565,9 @@ let ingredientsButton = document.querySelector('#ingredientsIcon');
 let tagsButton = document.querySelector('#tagsIcon');
 let tagsSelect = document.querySelector('#tagsSelect')
 let allergensButton = document.querySelector('#allergensIcon');
-let allergensSelect = document.querySelector('#allergensSelect')
+let allergensSelect = document.querySelector('#allergensSelect');
+let alternativesButton = document.querySelector('#alternativesIcon');
+let alternativesSelect = document.querySelector('#alternativesSelect');
 
 firstBullet.addEventListener('click', () => {
     third.classList.add('d-none');
@@ -587,15 +697,6 @@ notWorking.addEventListener('click', () => {
     Quagga.stop();
 })
 
-
-// if ((codeInput.value == "") || (codeInput.value == undefined) || (codeInput.value == null)) {
-//     sendButton.setAttribute('disabled', 'disabled');
-//     console.log(codeInput.value);
-// } else {
-//     console.log(codeInput.value);
-//     sendButton.removeAttribute('disabled');
-// }
-
 sendButton.addEventListener('click', () => {
     code = codeInput.value;
     first.classList.add('d-none');
@@ -606,7 +707,7 @@ sendButton.addEventListener('click', () => {
     sixth.classList.remove('d-none');
     setTimeout(() => {
         sixth.classList.add('d-none');
-        console.log(code)
+        // console.log(code)
         if ((code == "") || (code == undefined) || (code == null)) {
             fifth.classList.remove('d-none');
         } else {
@@ -624,12 +725,12 @@ quantityButton.addEventListener('click', () => {
             quantitySelect.classList.remove('quantityTitle__closed');
             quantitySelect.classList.add('quantityTitle__opened');
             selectClicked = true;
-            console.log(selectClicked);
+            // console.log(selectClicked);
         } else {
             quantitySelect.classList.add('quantityTitle__closed');
             quantitySelect.classList.remove('quantityTitle__opened');
             selectClicked = false;
-            console.log(selectClicked);
+            // console.log(selectClicked);
         }
     } else {
         quantitySelect.classList.remove('quantityTitle__opened');
@@ -722,12 +823,12 @@ tagsButton.addEventListener('click', () => {
 
 allergensButton.addEventListener('click', () => {
     if (allergensClicked == false) {
-        allergensSelect.classList.add('tagsSelect__closed');
-        allergensSelect.classList.remove('tagsSelect__opened');
+        allergensSelect.classList.add('allergensSelect__closed');
+        allergensSelect.classList.remove('allergensSelect__opened');
         allergensClicked = true;
     } else {
-        allergensSelect.classList.remove('tagsSelect__closed');
-        allergensSelect.classList.add('tagsSelect__opened');
+        allergensSelect.classList.remove('allergensSelect__closed');
+        allergensSelect.classList.add('allergensSelect__opened');
         allergensClicked = false;
         main.scrollTo({
             top: 1500,
@@ -736,6 +837,24 @@ allergensButton.addEventListener('click', () => {
         })
     }
 })
+
+alternativesButton.addEventListener('click', () => {
+    if (alternativesClicked == false) {
+        alternativesSelect.classList.add('alternativesSelect__closed');
+        alternativesSelect.classList.remove('alternativesSelect__opened');
+        alternativesClicked = true;
+    } else {
+        alternativesSelect.classList.remove('alternativesSelect__closed');
+        alternativesSelect.classList.add('alternativesSelect__opened');
+        alternativesClicked = true;
+        main.scrollTo({
+            top: 2000,
+            left: 0,
+            behavior: "smooth"
+        })
+    }
+})
+
 
 
 //8422904015553
