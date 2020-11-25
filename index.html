@@ -14,6 +14,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
     <title>Foodie App</title>
 </head>
@@ -157,13 +158,46 @@
         <!--Seventh view-->
         <div id="seventh__view" class="d-none">
             <div class="seventh__position">
-                <div class="headerseventh__position">
-                    <div class="foodImg__position">
-                        <img class="food__img" src="" alt="">
+                <div class="headerseventh__position row m-0 p-0">
+                    <!--Img & title-->
+                    <div class="col-9 m-0 p-0">
+                        <div class="row m-0 p-0">
+                            <div class="col-12 foodImg__position m-0 p-0 mt-3">
+                                <img class="food__img" src="" alt="">
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0 text-center">
+                            <div class="col-12 m-0 p-0 mt-2">
+                                <p id="productName" class="seventh__title m-0 p-0"></p>
+                                <p id="productBrand" class="seventh__subTitle m-0 p-0"></p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="header__productName">
-                        <p id="productName" class="seventh__title"></p>
-                        <p id="productBrand" class="seventh__subTitle"></p>
+                    <!--Menu-->
+                    <div class="col-3 m-0 p-0 menu__align">
+                        <div class="row m-0 p-0">
+                            <div class="col-12 m-0 p-0 mt-5">
+                                <div id="menu" class="menu menu__closed">
+                                    <!--First icon menu-->
+                                    <div class="row m-0 p-0 menu__itemSize">
+                                        <div class="col-12 m-0 p-0">
+                                            <i id="menuIcon" class="fas fa-ellipsis-h menu__icon icon__opened"></i>
+                                        </div>
+                                    </div>
+                                    <!--Here's where the next icons should be-->
+                                    <div id="menuOption1" class="row m-0 p-0 menu__itemSize d-none">
+                                        <div class="col-12 m-0 p-0">
+                                            <i class="ri-qr-scan-2-line menu__icon optionIcon icon__color"></i>
+                                        </div>
+                                    </div>
+                                    <div id="menuOption2" class="row m-0 p-0 menu__itemSize d-none">
+                                        <div class="col-12 m-0 p-0">
+                                            <i class="ri-history-fill menu__icon optionIcon icon__color"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="quantitySelect" class="quantityTitle__closed">

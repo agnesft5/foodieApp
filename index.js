@@ -56,6 +56,7 @@ let ingredientsClicked = false;
 let tagsClicked = false;
 let allergensClicked = false;
 let alternativesClicked = false;
+let menuClicked = false;
 let products = [];
 let objProduct;
 let tags;
@@ -386,11 +387,11 @@ function showData(data) {
             allergensSelect.classList.add('d-none');
         }
 
-        main.scrollTo({
-            top: 800,
-            left: 0,
-            behavior: "smooth"
-        })
+        // main.scrollTo({
+        //     top: 800,
+        //     left: 0,
+        //     behavior: "smooth"
+        // })
 
         // let categories = [];
         let category;
@@ -550,6 +551,7 @@ let tagsContainer = document.querySelector('#tagsContainer');
 let allergensContainer = document.querySelector('#allergensContainer');
 let alternativesContainer = document.querySelector('#alternativesContainer');
 let footer = document.querySelector("#footer");
+let menu = document.querySelector("#menu");
 
 // BUTTONS
 let firstBullet = document.querySelectorAll('.bullet__point')[0];
@@ -568,6 +570,9 @@ let allergensButton = document.querySelector('#allergensIcon');
 let allergensSelect = document.querySelector('#allergensSelect');
 let alternativesButton = document.querySelector('#alternativesIcon');
 let alternativesSelect = document.querySelector('#alternativesSelect');
+let menuButton = document.querySelector('#menuIcon');
+let menuOption1 = document.querySelector('#menuOption1');
+let menuOption2 = document.querySelector('#menuOption2');
 
 firstBullet.addEventListener('click', () => {
     third.classList.add('d-none');
@@ -796,11 +801,11 @@ ingredientsButton.addEventListener('click', () => {
         ingredientsSelect.classList.remove('ingredientsSelect__closed');
         ingredientsSelect.classList.add('ingredientsSelect__opened');
         ingredientsClicked = false;
-        main.scrollTo({
-            top: 800,
-            left: 0,
-            behavior: "smooth"
-        })
+        // main.scrollTo({
+        //     top: 800,
+        //     left: 0,
+        //     behavior: "smooth"
+        // })
     }
 })
 
@@ -813,11 +818,11 @@ tagsButton.addEventListener('click', () => {
         tagsSelect.classList.remove('tagsSelect__closed');
         tagsSelect.classList.add('tagsSelect__opened');
         tagsClicked = false;
-        main.scrollTo({
-            top: 1000,
-            left: 0,
-            behavior: "smooth"
-        })
+        // main.scrollTo({
+        //     top: 1000,
+        //     left: 0,
+        //     behavior: "smooth"
+        // })
     }
 })
 
@@ -830,11 +835,11 @@ allergensButton.addEventListener('click', () => {
         allergensSelect.classList.remove('allergensSelect__closed');
         allergensSelect.classList.add('allergensSelect__opened');
         allergensClicked = false;
-        main.scrollTo({
-            top: 1500,
-            left: 0,
-            behavior: "smooth"
-        })
+        // main.scrollTo({
+        //     top: 1500,
+        //     left: 0,
+        //     behavior: "smooth"
+        // })
     }
 })
 
@@ -846,15 +851,54 @@ alternativesButton.addEventListener('click', () => {
     } else {
         alternativesSelect.classList.remove('alternativesSelect__closed');
         alternativesSelect.classList.add('alternativesSelect__opened');
-        alternativesClicked = true;
-        main.scrollTo({
-            top: 2000,
-            left: 0,
-            behavior: "smooth"
-        })
+        alternativesClicked = false;
+        // main.scrollTo({
+        //     top: 1700,
+        //     left: 0,
+        //     behavior: "smooth"
+        // })
     }
 })
 
+menuButton.addEventListener('click', () => {
+    if (menuClicked == false) {
+        menuButton.classList.add(`fa-ellipsis-v`, `icon__closed`);
+        menuButton.classList.remove(`fa-ellipsis-h`, `icon__opened`);
+        menu.classList.add("menu__opened");
+        menu.classList.remove("menu__closed");
+        menuOption1.classList.remove('d-none');
+        menuOption2.classList.remove('d-none');
+        setTimeout(() => {
+            document.querySelectorAll('.optionIcon').forEach(option => {
+                option.classList.remove('icon__color');
+            })
+            document.querySelectorAll('.optionIcon').forEach(option => {
+                option.classList.add('icon__opened');
+            })
+            document.querySelector('#menuOption1').classList.add('menu__optionsBorder');
+            document.querySelector('#menuOption2').classList.add('menu__optionsBorder');
+        }, 1500);
+        menuClicked = true;
+    } else {
+        menuButton.classList.add(`fa-ellipsis-h`, `icon__opened`);
+        menuButton.classList.remove('fa-ellipsis-v', `icon__closed`)
+        menu.classList.add('menu__closed');
+        menu.classList.remove('menu__opened');
+        document.querySelectorAll('.optionIcon').forEach(option => {
+            option.classList.remove('icon__opened');
+        })
+        document.querySelectorAll('.optionIcon').forEach(option => {
+            option.classList.add('icon__color');
+        })
+        document.querySelector('#menuOption1').classList.remove('menu__optionsBorder');
+        document.querySelector('#menuOption2').classList.remove('menu__optionsBorder');
+        setTimeout(() => {
+            menuOption1.classList.add('d-none');
+            menuOption2.classList.add('d-none');
+        }, 100);
+        menuClicked = false;
+    }
+})
 
 
 //8422904015553

@@ -302,18 +302,19 @@ canvas{
     margin: 3% auto;
 }
 .headerseventh__position{
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
     position: fixed;
     width: 99.5%;
-    height: 37vh;
+    height: 40vh;
     z-index: 10;
     background-color: rgb(217, 241, 228);
     top: 0;
     left: 0;
     border-radius: .25rem;
     margin: 0 auto !important;
+    box-shadow: 2px 2px rgba(180, 228, 201, .5)
 }
 .foodImg__position{
     display: flex;
@@ -326,7 +327,7 @@ canvas{
     /* width: 95%; */
     vertical-align: middle;
     border-radius: .35rem;
-    height: 30vh;
+    height: 25vh;
     max-width: 40vw;
 }
 .header__productName{
@@ -335,14 +336,14 @@ canvas{
 }
 .seventh__title{
     font-family: 'Alegreya Sans', sans-serif;
-    font-size: 1.35rem;
+    font-size: 1.2rem;
     color: #167663;
     text-shadow: 1px 1px white;
     font-weight: 600;
 }
 .seventh__subTitle{
     font-family: 'Alegreya Sans', sans-serif;
-    font-size: 1.1rem;
+    font-size: .95rem;
     color: black;
     font-weight: 400;
 }
@@ -377,7 +378,7 @@ canvas{
 }
 .quantityTitle__closed, .ingredientsSelect__closed, .tagsSelect__closed, .allergensSelect__closed, .alternativesSelect__closed{
     position: relative;
-    top: 40vh;
+    top: 41vh;
     text-align: left;
     /* border-bottom: 1.5px solid #167663; */
     width: 93%;
@@ -398,7 +399,7 @@ canvas{
 }
 .quantityTitle__opened{
     position: relative;
-    top: 40vh;
+    top: 41vh;
     text-align: left;
     /* border-bottom: 1.5px solid #167663; */
     width: 93%;
@@ -551,6 +552,7 @@ canvas{
     height: 10vh;
     border-radius: .25rem;
     margin: 5% auto !important;
+    max-width: 20vw;
 }
 .alternative__align{
     display: flex;
@@ -565,4 +567,52 @@ canvas{
 }
 .alternative__fontSize{
     font-size: .85rem;
+}
+.menu__align{
+    display: flex;
+    justify-content: center;
+}
+.menu__itemSize{
+    height: 7vh;
+    width: 12vw;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+.menu__optionsBorder{
+    border: 0.5px solid rgba(180, 228, 201, .5);
+    border-radius: .25rem;
+}
+.icon__color{
+    color: transparent;
+    text-shadow: none;
+    transition: 2s;
+}
+.menu__icon{
+    font-size: 2.05rem;
+}
+.icon__opened{
+    color: rgba(180, 228, 201, 1);
+    text-shadow: 0.5px 0.5px #167663;
+    transition:  2s;
+}
+.icon__closed{
+    color:  #167663;
+    text-shadow: 0.5px 0.5px rgba(180, 228, 201, 1);
+    transition:  2s;
+}
+.menu{
+    border: 1px solid rgba(180, 228, 201, 1);
+    background-color: rgba(250, 250, 250, .5);
+    width: 12vw;
+    border-radius: .25rem;
+    box-shadow: 1px 1px #167663;
+}
+.menu__closed{
+    height: 7vh;
+    transition: height 2s;
+}
+.menu__opened{
+    height: 21vh;
+    transition: height 2s;
 }
