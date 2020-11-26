@@ -589,7 +589,7 @@ canvas{
     transition: 2s;
 }
 .menu__icon{
-    font-size: 2.05rem;
+    font-size: 1.75rem;
 }
 .icon__opened{
     color: rgba(180, 228, 201, 1);
