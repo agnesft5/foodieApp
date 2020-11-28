@@ -386,6 +386,16 @@ function showData(data) {
                     tags.splice(tags.indexOf(tags[i]), 1)
                 }
             }
+            for (let j = 0; j <= tags.length - 1; j++) {
+                if (tags[i] == tags[j] && i != j) {
+                    tags.splice(tags.indexOf(tags[i]), 1)
+                }
+            }
+            for (let j = 0; j <= tags.length - 1; j++) {
+                if (tags[i] == tags[j] && i != j) {
+                    tags.splice(tags.indexOf(tags[i]), 1)
+                }
+            }
         }
         if (tags !== undefined) {
             for (let i = 0; i <= tags.length - 1; i++) {
@@ -469,7 +479,18 @@ function showData(data) {
                 allergens.push(objProduct.product.traces_hierarchy[i]);
             }
         }
+        console.log(allergens);
         for (let i = 0; i <= allergens.length - 1; i++) {
+            for (let j = 0; j <= allergens.length - 1; j++) {
+                if (allergens[i] == allergens[j] && i != j) {
+                    allergens.splice(allergens.indexOf(allergens[i]), 1)
+                }
+            }
+            for (let j = 0; j <= allergens.length - 1; j++) {
+                if (allergens[i] == allergens[j] && i != j) {
+                    allergens.splice(allergens.indexOf(allergens[i]), 1)
+                }
+            }
             for (let j = 0; j <= allergens.length - 1; j++) {
                 if (allergens[i] == allergens[j] && i != j) {
                     allergens.splice(allergens.indexOf(allergens[i]), 1)
@@ -657,9 +678,6 @@ thirdBullet.addEventListener('click', () => {
 startButton.addEventListener('click', () => {
     closeViews(fourth);
     footer.classList.add('d-none');
-    document.querySelectorAll('.bullet__point').forEach(bullet => {
-        bullet.classList.add('d-none');
-    })
     Quagga.init({
         inputStream: {
             name: "Live",
@@ -932,7 +950,7 @@ menuScan.addEventListener('click', () => {
 menuSearchHistory.addEventListener('click', ()=>{
     closeViews(sixth);
     setTimeout(() => {
-        document.write("Caca pedo culo pis")
+        document.write("Products saved view here")
     }, 3000);
 })
 
