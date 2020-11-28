@@ -97,6 +97,7 @@ let allergensContainer = document.querySelector('#allergensContainer');
 let alternativesContainer = document.querySelector('#alternativesContainer');
 let footer = document.querySelector("#footer");
 let menu = document.querySelector("#menu");
+let menuDisplay = document.querySelector("#menuDisplay");
 
 // BUTTONS
 let firstBullet = document.querySelectorAll('.bullet__point')[0];
@@ -117,7 +118,7 @@ let alternativesButton = document.querySelector('#alternativesIcon');
 let alternativesSelect = document.querySelector('#alternativesSelect');
 let menuButton = document.querySelector('#menuIcon');
 let menuScan = document.querySelector('#menuScan');
-let menuOption2 = document.querySelector('#menuOption2');
+let menuSearchHistory = document.querySelector('#menuSearchHistory');
 
 //GET
 function httpGet(theUrl, callback) {
@@ -128,20 +129,9 @@ function httpGet(theUrl, callback) {
         console.log("checkpoint");
     }
     xmlHttp.open("GET", theUrl, false);
-    xmlHttp.setRequestHeader("Content-type", "application/json", "charset=utf-8", "X-Requested-With", "XMLHttpRequest")
+    xmlHttp.setRequestHeader("Content-type", "application/json", "charset=utf-8", "X-Requested-With", "XMLHttpRequest", "Access-Control-Allow-Origin")
     xmlHttp.send();
 };
-
-//SHOW THE LAST PRODUCT THE USER SCANNED
-window.onload = () => {
-    savedData = JSON.parse(localStorage.getItem("products"));
-    if (savedData) {
-        closeViews(seventh);
-        changeLink(savedData[0]["id"]);
-    } else {
-        closeViews(first);
-    }
-}
 
 //CLOSE EVERY VIEW EXCEPT THE ONE WE WANT TO SHOW
 function closeViews(toShow) {
@@ -150,6 +140,8 @@ function closeViews(toShow) {
     })
     toShow.classList.remove('d-none');
     if (toShow == first || toShow == second || toShow == third) {
+        footer.classList.remove('d-none');
+        menuDisplay.classList.add('d-none');
         document.querySelectorAll('.bullet__point').forEach(bullet => {
             bullet.classList.remove('bullet__active');
         })
@@ -160,6 +152,38 @@ function closeViews(toShow) {
         } else if (toShow == third) {
             thirdBullet.classList.add('bullet__active');
         }
+    } else if (toShow == fourth || toShow == fifth || toShow == sixth) {
+        footer.classList.add('d-none');
+        menuDisplay.classList.add('d-none');
+        html.classList.add('unScrollable');
+        body.classList.add('unScrollable');
+    }else if(toShow == seventh){
+        footer.classList.add('d-none');
+        html.classList.remove('unScrollable');
+        body.classList.remove('unScrollable');
+        menuDisplay.classList.remove('d-none');
+    }
+}
+
+//PRODUCT LINK
+function changeLink(productCode) {
+    httpGet(`https://cors-anywhere.herokuapp.com/https://world.openfoodfacts.org/api/v0/product/${productCode}.json`, showData);
+
+};
+
+//ALTERNATIVES LINK
+function getAlternatives(productName) {
+    httpGet(`https://cors-anywhere.herokuapp.com/https://world.openfoodfacts.org/category/${productName}.json`, showAlternatives)
+};
+
+//SHOW THE LAST PRODUCT THE USER SCANNED
+window.onload = () => {
+    savedData = JSON.parse(localStorage.getItem("products"));
+    if (savedData) {
+        closeViews(seventh);
+        changeLink(savedData[0]["id"]);
+    } else {
+        closeViews(first);
     }
 }
 
@@ -176,9 +200,9 @@ function closeSeventhViewSelects() {
         option.classList.add('icon__color');
     })
     document.querySelector('#menuScan').classList.remove('menu__optionsBorder');
-    document.querySelector('#menuOption2').classList.remove('menu__optionsBorder');
+    document.querySelector('#menuSearchHistory').classList.remove('menu__optionsBorder');
     menuScan.classList.add('d-none');
-    menuOption2.classList.add('d-none');
+    menuSearchHistory.classList.add('d-none');
     menu.classList.add('menu__closed');
     menu.classList.remove('menu__opened');
     menuClicked = false;
@@ -221,16 +245,22 @@ function showData(data) {
     if (objProduct.status_verbose == 'product found') {
         //SAVE DATA TO LOCAL STORAGE
         let product = {
-            "name":objProduct.product.product_name,
+            "name": objProduct.product.product_name,
             "imgUrl": objProduct.product.image_url,
             "id": objProduct.product.id,
             "date": new Date().toDateString()
         }
-        if (localStorage.getItem('products')){
+        if (localStorage.getItem('products')) {
             let savedProducts = JSON.parse(localStorage.getItem('products'));
+            for (let i = 0; i <= savedProducts.length - 1; i++) {
+                let savedProduct = savedProducts[i];
+                if (savedProduct["id"] == objProduct.product.id) {
+                    savedProducts.splice(savedProducts.indexOf(savedProduct), 1)
+                }
+            }
             savedProducts.unshift(product);
             localStorage.setItem('products', JSON.stringify(savedProducts));
-        }else{
+        } else {
             localStorage.setItem('products', JSON.stringify([product]));
         }
         //GLOBAL SCOPE VARS
@@ -589,7 +619,7 @@ function showAlternatives(data) {
                 alternativesContainer.appendChild(altCard);
             }
         }
-    }else{
+    } else {
         console.log("Product not found");
     }
 }
@@ -614,17 +644,6 @@ window.onclick = e => {
         console.log('Id not found')
     }
 }
-
-//PRODUCT LINK
-function changeLink(productCode) {
-    httpGet(`https://cors-anywhere.herokuapp.com/https://world.openfoodfacts.org/api/v0/product/${productCode}.json`, showData);
-
-};
-
-//ALTERNATIVES LINK
-function getAlternatives(productName) {
-    httpGet(`https://cors-anywhere.herokuapp.com/https://world.openfoodfacts.org/category/${productName}.json`, showAlternatives)
-};
 
 firstBullet.addEventListener('click', () => {
     closeViews(first);
@@ -721,9 +740,7 @@ sendButton.addEventListener('click', () => {
         if ((code == "") || (code == undefined) || (code == null)) {
             fifth.classList.remove('d-none');
         } else {
-            seventh.classList.remove('d-none');
-            body.classList.remove('unScrollable');
-            html.classList.remove('unScrollable');
+            closeViews(seventh);
             changeLink(code);
         }
     }, 3000);
@@ -872,7 +889,7 @@ menuButton.addEventListener('click', () => {
         menu.classList.add("menu__opened");
         menu.classList.remove("menu__closed");
         menuScan.classList.remove('d-none');
-        menuOption2.classList.remove('d-none');
+        menuSearchHistory.classList.remove('d-none');
         setTimeout(() => {
             document.querySelectorAll('.optionIcon').forEach(option => {
                 option.classList.remove('icon__color');
@@ -881,7 +898,7 @@ menuButton.addEventListener('click', () => {
                 option.classList.add('icon__opened');
             })
             document.querySelector('#menuScan').classList.add('menu__optionsBorder');
-            document.querySelector('#menuOption2').classList.add('menu__optionsBorder');
+            document.querySelector('#menuSearchHistory').classList.add('menu__optionsBorder');
         }, 1500);
         menuClicked = true;
     } else {
@@ -896,10 +913,10 @@ menuButton.addEventListener('click', () => {
             option.classList.add('icon__color');
         })
         document.querySelector('#menuScan').classList.remove('menu__optionsBorder');
-        document.querySelector('#menuOption2').classList.remove('menu__optionsBorder');
+        document.querySelector('#menuSearchHistory').classList.remove('menu__optionsBorder');
         setTimeout(() => {
             menuScan.classList.add('d-none');
-            menuOption2.classList.add('d-none');
+            menuSearchHistory.classList.add('d-none');
         }, 100);
         menuClicked = false;
     }
@@ -907,13 +924,16 @@ menuButton.addEventListener('click', () => {
 
 menuScan.addEventListener('click', () => {
     closeViews(third);
-    document.querySelectorAll('.bullet__point').forEach(bullet => {
-        bullet.classList.remove('bullet__active');
-    })
-    thirdBullet.classList.add('bullet__active');
     resetInput();
     resetContainers();
     closeSeventhViewSelects();
+})
+
+menuSearchHistory.addEventListener('click', ()=>{
+    closeViews(sixth);
+    setTimeout(() => {
+        document.write("Caca pedo culo pis")
+    }, 3000);
 })
 
 //8422904015553

@@ -568,6 +568,12 @@ canvas{
 .alternative__fontSize{
     font-size: .85rem;
 }
+.menu__position{
+    position: fixed;
+    top: 0vh;
+    left: 80vw;
+    z-index: 15;
+}
 .menu__align{
     display: flex;
     justify-content: center;
