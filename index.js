@@ -145,6 +145,8 @@ function closeViews(toShow) {
     if (toShow == first || toShow == second || toShow == third) {
         footer.classList.remove('d-none');
         menuDisplay.classList.add('d-none');
+        html.classList.add('unScrollable');
+        body.classList.add('unScrollable');
         document.querySelectorAll('.bullet__point').forEach(bullet => {
             bullet.classList.remove('bullet__active');
         })
@@ -162,16 +164,18 @@ function closeViews(toShow) {
         body.classList.add('unScrollable');
     } else if (toShow == seventh || toShow == eighth) {
         footer.classList.add('d-none');
-        html.classList.remove('unScrollable');
-        body.classList.remove('unScrollable');
         menuDisplay.classList.remove('d-none');
-        // if(toShow == seventh){
-        //     menuGoBack.classList.add('d-none');
-        //     menuSearchHistory.classList.remove('d-none');
-        // }else{
-        //     menuSearchHistory.classList.add('d-none');
-        //     menuGoBack.classList.remove('d-none');
-        // }
+        if (toShow == seventh) {
+            html.classList.remove('unScrollable');
+            body.classList.remove('unScrollable');
+            //     menuGoBack.classList.add('d-none');
+            //     menuSearchHistory.classList.remove('d-none');
+        } else {
+            html.classList.add('unScrollable');
+            body.classList.add('unScrollable');
+            //     menuSearchHistory.classList.add('d-none');
+            //     menuGoBack.classList.remove('d-none');
+        }
     }
 }
 
