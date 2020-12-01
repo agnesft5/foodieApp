@@ -293,13 +293,17 @@ canvas{
     align-items: center;
     height: 60vh;
 }
-.macro__card{
+.macro__card, .saved__card{
     border-radius: .75rem;
     border: 1px solid rgba(180, 228, 201, .3);
     background-color: rgba(250, 250, 250, .5);
     height: 8vh;
     width: 95%;
     margin: 3% auto;
+}
+.saved__card{
+    height: 17vh;
+    margin: 3% auto !important;
 }
 .headerseventh__position{
     /* display: flex;
@@ -334,12 +338,17 @@ canvas{
     margin: 5%;
     margin-left: 2.5%;
 }
-.seventh__title{
+.seventh__title, .savedName__title{
     font-family: 'Alegreya Sans', sans-serif;
     font-size: 1.2rem;
     color: #167663;
     text-shadow: 1px 1px white;
     font-weight: 600;
+}
+.savedName__title{
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }
 .seventh__subTitle{
     font-family: 'Alegreya Sans', sans-serif;
@@ -417,7 +426,7 @@ canvas{
     overflow: hidden;
     background-color: rgb(217, 241, 228);
 }
-.quantity__title, .ingredients__title, .tags__title, .allergens__title, .alternatives__title{
+.quantity__title, .ingredients__title, .tags__title, .allergens__title, .alternatives__title, .savedItems__title{
     font-family: 'Alegreya Sans', sans-serif;
     font-size: 1.2rem;
     color: #167663;
@@ -621,4 +630,31 @@ canvas{
 .menu__opened{
     height: 21vh;
     transition: height 2s;
+}
+.eighth__position{
+    height: 75vh;
+    width: 93%;
+    margin: 0 auto !important;
+}
+.savedItems__container{
+    height: 70vh;
+    overflow: scroll;
+}
+.eraseIcon__align, .savedImg__align{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.savedItems__img{
+    height: 15vh;
+    max-width: 15vw;
+    border-radius: .25rem;
+}
+.savedInfo__align{
+    display: grid;
+    text-align: center;
+}
+.eraseIcon{
+    font-size: 1.1rem;
+    color: #167663;
 }

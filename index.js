@@ -76,6 +76,7 @@ let fourth = document.querySelector('#fourth__view');
 let fifth = document.querySelector('#fifth__view');
 let sixth = document.querySelector('#sixth__view');
 let seventh = document.querySelector('#seventh__view');
+let eighth = document.querySelector('#eighth__view');
 
 //COMPONENTS
 let display = document.querySelector('#display');
@@ -98,6 +99,7 @@ let alternativesContainer = document.querySelector('#alternativesContainer');
 let footer = document.querySelector("#footer");
 let menu = document.querySelector("#menu");
 let menuDisplay = document.querySelector("#menuDisplay");
+let savedItemsContainer = document.querySelector("#savedItemsContainer");
 
 // BUTTONS
 let firstBullet = document.querySelectorAll('.bullet__point')[0];
@@ -119,6 +121,7 @@ let alternativesSelect = document.querySelector('#alternativesSelect');
 let menuButton = document.querySelector('#menuIcon');
 let menuScan = document.querySelector('#menuScan');
 let menuSearchHistory = document.querySelector('#menuSearchHistory');
+// let menuGoBack = document.querySelector('#menuGoBack');
 
 //GET
 function httpGet(theUrl, callback) {
@@ -157,11 +160,18 @@ function closeViews(toShow) {
         menuDisplay.classList.add('d-none');
         html.classList.add('unScrollable');
         body.classList.add('unScrollable');
-    }else if(toShow == seventh){
+    } else if (toShow == seventh || toShow == eighth) {
         footer.classList.add('d-none');
         html.classList.remove('unScrollable');
         body.classList.remove('unScrollable');
         menuDisplay.classList.remove('d-none');
+        // if(toShow == seventh){
+        //     menuGoBack.classList.add('d-none');
+        //     menuSearchHistory.classList.remove('d-none');
+        // }else{
+        //     menuSearchHistory.classList.add('d-none');
+        //     menuGoBack.classList.remove('d-none');
+        // }
     }
 }
 
@@ -179,7 +189,7 @@ function getAlternatives(productName) {
 //SHOW THE LAST PRODUCT THE USER SCANNED
 window.onload = () => {
     savedData = JSON.parse(localStorage.getItem("products"));
-    if (savedData) {
+    if (savedData.length > 0) {
         closeViews(seventh);
         changeLink(savedData[0]["id"]);
     } else {
@@ -199,10 +209,12 @@ function closeSeventhViewSelects() {
     document.querySelectorAll('.optionIcon').forEach(option => {
         option.classList.add('icon__color');
     })
-    document.querySelector('#menuScan').classList.remove('menu__optionsBorder');
-    document.querySelector('#menuSearchHistory').classList.remove('menu__optionsBorder');
+    menuScan.classList.remove('menu__optionsBorder');
+    menuSearchHistory.classList.remove('menu__optionsBorder');
+    //menuGoBack.classList.remove('menu__optionsBorder');
     menuScan.classList.add('d-none');
     menuSearchHistory.classList.add('d-none');
+    //menuGoBack.classList.add('d-none');
     menu.classList.add('menu__closed');
     menu.classList.remove('menu__opened');
     menuClicked = false;
@@ -229,12 +241,76 @@ function resetContainers() {
     allergensContainer.innerHTML = "";
     alternativesContainer.innerHTML = "";
     tagsContainer.innerHTML = "";
+    savedItemsContainer.innerHTML = "";
 }
 
 //RESET INPUT & CODE
 function resetInput() {
     code = "";
     codeInput.value = "";
+}
+
+//SHOW SAVED DATA
+function showSavedData() {
+    let savedItems = JSON.parse(localStorage.getItem("products"));
+    if (savedItems) {
+        for (let i = 0; i <= savedItems.length - 1; i++) {
+            let name = savedItems[i]["name"];
+            let date = savedItems[i]["date"];
+            let imgUrl = savedItems[i]["imgUrl"];
+            let id = savedItems[i]["id"];
+            console.log(savedItems);
+
+            let card = document.createElement('div');
+            card.classList.add('row', 'm-0', 'p-0', 'saved__card', 'savedItem');
+            card.setAttribute('id', id);
+
+            let infoContainer = document.createElement('div');
+            infoContainer.setAttribute('id', id);
+            infoContainer.classList.add('col-9', 'm-0', 'p-0', 'savedItem');
+            infoContainer.setAttribute('style', 'margin: auto !important');
+            let infoRow = document.createElement('div');
+            infoRow.setAttribute('id', id);
+            infoRow.classList.add('row', 'm-0', 'p-0', 'savedItem');
+
+            let imgCol = document.createElement('div');
+            imgCol.setAttribute('id', id);
+            imgCol.classList.add('col-6', 'm-0', 'p-0', 'savedImg__align', 'savedItem');
+            let savedImg = document.createElement('img');
+            savedImg.setAttribute('src', imgUrl);
+            savedImg.classList.add('savedItems__img', 'savedItem');
+            savedImg.setAttribute('id', id);
+
+            let infoCol = document.createElement('div');
+            infoCol.setAttribute('id', id);
+            infoCol.classList.add('col-6', 'm-0', 'p-0', 'savedInfo__align', 'savedItem');
+            let savedName = document.createElement('p');
+            savedName.classList.add('savedName__title', 'm-0', 'p-0', 'savedItem');
+            savedName.textContent = name;
+            savedName.setAttribute('id', id);
+            let savedDate = document.createElement('p');
+            savedDate.innerHTML = `<i class="far fa-clock savedItem"></i> ${date}`;
+            savedDate.classList.add('simpleText', 'savedItem');
+            savedDate.setAttribute('id', id);
+
+            imgCol.appendChild(savedImg);
+            infoRow.appendChild(imgCol);
+            infoCol.appendChild(savedName);
+            infoCol.appendChild(savedDate);
+            infoRow.appendChild(infoCol);
+            infoContainer.appendChild(infoRow);
+            card.appendChild(infoContainer);
+
+            let eraseContainer = document.createElement('div');
+            eraseContainer.classList.add('col-3', 'm-0', 'p-0', 'eraseIcon__align');
+            eraseContainer.innerHTML = `<i id="eraseIcon${i}" class="far fa-trash-alt eraseIcon"></i>`
+            card.appendChild(eraseContainer);
+
+            savedItemsContainer.appendChild(card);
+        }
+    } else {
+        console.log("Méiyou")
+    }
 }
 
 //SHOW DATA
@@ -417,7 +493,7 @@ function showData(data) {
             for (let i = 0; i <= hideTagCards.length - 1; i++) {
                 correctedTags.splice(correctedTags.indexOf(hideTagCards[i]), 1)
             }
-            console.log(correctedTags);
+            // console.log(correctedTags);
             for (let i = 0; i <= correctedTags.length - 1; i++) {
                 let tagTitle = correctedTags[i];
                 let tagCard = document.createElement('div');
@@ -479,7 +555,7 @@ function showData(data) {
                 allergens.push(objProduct.product.traces_hierarchy[i]);
             }
         }
-        console.log(allergens);
+        // console.log(allergens);
         for (let i = 0; i <= allergens.length - 1; i++) {
             for (let j = 0; j <= allergens.length - 1; j++) {
                 if (allergens[i] == allergens[j] && i != j) {
@@ -497,7 +573,7 @@ function showData(data) {
                 }
             }
         }
-        console.log(allergens);
+        // console.log(allergens);
         if (allergens !== undefined) {
             for (let i = 0; i <= allergens.length - 1; i++) {
                 let allergen = allergens[i]
@@ -518,7 +594,7 @@ function showData(data) {
             for (let i = 0; i <= hideAllergenCards.length - 1; i++) {
                 correctedAllergens.splice(correctedAllergens.indexOf(hideAllergenCards[i]), 1)
             }
-            console.log(correctedAllergens);
+            // console.log(correctedAllergens);
             for (i = 0; i <= correctedAllergens.length - 1; i++) {
                 let allergenTitle = correctedAllergens[i];
                 let allergensCard = document.createElement('div');
@@ -578,7 +654,7 @@ function showData(data) {
             }
         }
         cat = correctedCategory.join('').split('-').join(' ');
-        console.log(cat);
+        // console.log(cat);
         setTimeout(() => {
             getAlternatives(cat);
             cat = undefined;
@@ -649,20 +725,37 @@ function showAlternatives(data) {
 window.onclick = e => {
     let element = e.target;
     let id = element.getAttribute('id');
-    if (id != undefined || id != null || id != "") {
-        if (element.classList.contains('altCard')) {
-            resetContainers();
-            closeViews(sixth);
-            closeSeventhViewSelects();
-            changeLink(id);
-            setTimeout(() => {
-                closeViews(seventh);
-            }, 3000);
+    if (id) {
+        if (id != undefined || id != null || id != "") {
+            if (element.classList.contains('altCard') || element.classList.contains('savedItem')) {
+                resetContainers();
+                closeViews(sixth);
+                closeSeventhViewSelects();
+                changeLink(id);
+                setTimeout(() => {
+                    closeViews(seventh);
+                }, 3000);
+            } else if (id.includes('eraseIcon')) {
+                let index = [];
+                for (let i = 0; i <= id.length - 1; i++) {
+                    if (i > 8) {
+                        index.push(id[i]);
+                    }
+                }
+                console.log(index.join(''));
+                let savedProducts = JSON.parse(localStorage.getItem('products'));
+                savedProducts.splice(index.join(''), 1);
+                localStorage.setItem('products', JSON.stringify(savedProducts));
+                savedItemsContainer.innerHTML = "";
+                showSavedData();
+            } else {
+                console.log("Not an alternative product card");
+            }
         } else {
-            console.log("Not an alternative product card");
+            console.log('Id unreadable');
         }
     } else {
-        console.log('Id not found')
+        console.log('This element has no id');
     }
 }
 
@@ -697,7 +790,7 @@ startButton.addEventListener('click', () => {
     });
 })
 Quagga.onDetected((data) => {
-    console.log(data['codeResult']['code']);
+    // console.log(data['codeResult']['code']);
     display.classList.remove('d-none');
     loading.classList.remove('d-none');
     Quagga.stop();
@@ -915,8 +1008,8 @@ menuButton.addEventListener('click', () => {
             document.querySelectorAll('.optionIcon').forEach(option => {
                 option.classList.add('icon__opened');
             })
-            document.querySelector('#menuScan').classList.add('menu__optionsBorder');
-            document.querySelector('#menuSearchHistory').classList.add('menu__optionsBorder');
+            menuScan.classList.add('menu__optionsBorder');
+            menuSearchHistory.classList.add('menu__optionsBorder');
         }, 1500);
         menuClicked = true;
     } else {
@@ -930,8 +1023,8 @@ menuButton.addEventListener('click', () => {
         document.querySelectorAll('.optionIcon').forEach(option => {
             option.classList.add('icon__color');
         })
-        document.querySelector('#menuScan').classList.remove('menu__optionsBorder');
-        document.querySelector('#menuSearchHistory').classList.remove('menu__optionsBorder');
+        menuScan.classList.remove('menu__optionsBorder');
+        menuSearchHistory.classList.remove('menu__optionsBorder');
         setTimeout(() => {
             menuScan.classList.add('d-none');
             menuSearchHistory.classList.add('d-none');
@@ -947,12 +1040,19 @@ menuScan.addEventListener('click', () => {
     closeSeventhViewSelects();
 })
 
-menuSearchHistory.addEventListener('click', ()=>{
+menuSearchHistory.addEventListener('click', () => {
     closeViews(sixth);
+    closeSeventhViewSelects();
+    resetContainers();
+    resetInput();
     setTimeout(() => {
-        document.write("Products saved view here")
+        closeViews(eighth);
+        showSavedData();
     }, 3000);
 })
+
+
+//<a href="https://lovepik.com/images/png-cartoon-fox.html">Cartoon Fox Png vectors by Lovepik.com</a>
 
 //8422904015553
 //8436008521063
