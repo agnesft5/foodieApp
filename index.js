@@ -53,6 +53,7 @@ let secondQuantity;
 let tags;
 let allergens;
 let savedData;
+let currentView;
 
 //FLAGS
 let quantityClicked = false;
@@ -100,6 +101,9 @@ let footer = document.querySelector("#footer");
 let menu = document.querySelector("#menu");
 let menuDisplay = document.querySelector("#menuDisplay");
 let savedItemsContainer = document.querySelector("#savedItemsContainer");
+let alertButton = document.querySelector('#alertButton');
+let alertCard = document.querySelector('#alert');
+let alertMsg = document.querySelector('#alertMsg');
 
 // BUTTONS
 let firstBullet = document.querySelectorAll('.bullet__point')[0];
@@ -121,7 +125,7 @@ let alternativesSelect = document.querySelector('#alternativesSelect');
 let menuButton = document.querySelector('#menuIcon');
 let menuScan = document.querySelector('#menuScan');
 let menuSearchHistory = document.querySelector('#menuSearchHistory');
-// let menuGoBack = document.querySelector('#menuGoBack');
+let menuGoBack = document.querySelector('#menuGoBack');
 
 //GET
 function httpGet(theUrl, callback) {
@@ -136,12 +140,29 @@ function httpGet(theUrl, callback) {
     xmlHttp.send();
 };
 
+//NO OUTPUT
+function noDataToShow(container, text, rowStyle) {
+    container.innerHTML = `
+        <div class="row mt-3 mb-3 p-0" style="height:12vh; border-radius:.25rem; background-color: rgba(250, 250, 250, .5);${rowStyle};">
+            <div class="col-12 m-0 p-0" style="display:flex; justify-content:center; align-items:center; text-align:center;">
+                <p class="simpleText">${text}</p>
+            </div>
+        </div>
+        `
+}
+
 //CLOSE EVERY VIEW EXCEPT THE ONE WE WANT TO SHOW
 function closeViews(toShow) {
     views.forEach(view => {
         view.classList.add('d-none');
     })
     toShow.classList.remove('d-none');
+    let id = toShow.getAttribute('id');
+    let clickedView = [];
+    for (let i = 0; i < id.indexOf('_'); i++) {
+        clickedView.push(id[i]);
+    }
+    currentView = clickedView.join('');
     if (toShow == first || toShow == second || toShow == third) {
         footer.classList.remove('d-none');
         menuDisplay.classList.add('d-none');
@@ -168,13 +189,14 @@ function closeViews(toShow) {
         if (toShow == seventh) {
             html.classList.remove('unScrollable');
             body.classList.remove('unScrollable');
-            //     menuGoBack.classList.add('d-none');
-            //     menuSearchHistory.classList.remove('d-none');
+            menuGoBack.classList.add('d-none');
+            menuSearchHistory.classList.remove('d-none');
+            cardsContainer.scrollTo(0, 0);
         } else {
             html.classList.add('unScrollable');
             body.classList.add('unScrollable');
-            //     menuSearchHistory.classList.add('d-none');
-            //     menuGoBack.classList.remove('d-none');
+            menuSearchHistory.classList.add('d-none');
+            menuGoBack.classList.remove('d-none');
         }
     }
 }
@@ -215,10 +237,10 @@ function closeSeventhViewSelects() {
     })
     menuScan.classList.remove('menu__optionsBorder');
     menuSearchHistory.classList.remove('menu__optionsBorder');
-    //menuGoBack.classList.remove('menu__optionsBorder');
+    menuGoBack.classList.remove('menu__optionsBorder');
     menuScan.classList.add('d-none');
     menuSearchHistory.classList.add('d-none');
-    //menuGoBack.classList.add('d-none');
+    menuGoBack.classList.add('d-none');
     menu.classList.add('menu__closed');
     menu.classList.remove('menu__opened');
     menuClicked = false;
@@ -240,6 +262,7 @@ function closeSeventhViewSelects() {
 function resetContainers() {
     tags = [];
     allergens = [];
+    nutriments = [];
     seventh.classList.add('d-none');
     cardsContainer.innerHTML = "";
     allergensContainer.innerHTML = "";
@@ -257,7 +280,7 @@ function resetInput() {
 //SHOW SAVED DATA
 function showSavedData() {
     let savedItems = JSON.parse(localStorage.getItem("products"));
-    if (savedItems) {
+    if (savedItems.length > 0) {
         for (let i = 0; i <= savedItems.length - 1; i++) {
             let name = savedItems[i]["name"];
             let date = savedItems[i]["date"];
@@ -313,7 +336,7 @@ function showSavedData() {
             savedItemsContainer.appendChild(card);
         }
     } else {
-        console.log("Méiyou")
+        noDataToShow(savedItemsContainer, "You don't have any item saved");
     }
 }
 
@@ -323,7 +346,7 @@ function showData(data) {
     //console.log(objProduct);
     // console.log(objProduct.product);
     if (objProduct.status_verbose == 'product found') {
-        //SAVE DATA TO LOCAL STORAGE
+        //SAVING DATA TO LOCAL STORAGE
         let product = {
             "name": objProduct.product.product_name,
             "imgUrl": objProduct.product.image_url,
@@ -416,10 +439,14 @@ function showData(data) {
             card.appendChild(titleCol);
             card.appendChild(infoCol);
             card.appendChild(rateCol);
-            if ((info.textContent.includes(NaN)) || (info.textContent.includes(undefined)) || (info.textContent.includes(null))) {
+            cardsContainer.appendChild(card);
+
+            if ((Object.keys(objProduct.product.nutriments) <= 3) || (!Object.keys(objProduct.product.nutriments).includes('energy-kcal_value'))) {
+                noDataToShow(cardsContainer, "We did not found any information about this product's nutriments", "width: 92%; margin: 0 auto !important")
+            } else if ((info.textContent.includes(NaN)) || (info.textContent.includes(undefined)) || (info.textContent.includes(null))) {
                 card.classList.add('d-none');
             }
-            cardsContainer.appendChild(card);
+
             //QUANTITIES
             if (objProduct.product.serving_quantity && objProduct.product.serving_quantity != percent) {
                 servingQuantity = objProduct.product.serving_quantity;
@@ -498,44 +525,49 @@ function showData(data) {
                 correctedTags.splice(correctedTags.indexOf(hideTagCards[i]), 1)
             }
             // console.log(correctedTags);
-            for (let i = 0; i <= correctedTags.length - 1; i++) {
-                let tagTitle = correctedTags[i];
-                let tagCard = document.createElement('div');
-                tagCard.classList.add('tags__card', 'row');
+            if (correctedTags.length > 0) {
+                for (let i = 0; i <= correctedTags.length - 1; i++) {
+                    let tagTitle = correctedTags[i];
+                    let tagCard = document.createElement('div');
+                    tagCard.classList.add('tags__card', 'row');
 
-                let tag__title = document.createElement('p');
-                tag__title.textContent = tagTitle;
-                tag__title.classList.add('simpleText', 'capitalize')
+                    let tag__title = document.createElement('p');
+                    tag__title.textContent = tagTitle;
+                    tag__title.classList.add('simpleText', 'capitalize')
 
-                let tagIconCol = document.createElement('div');
-                tagIconCol.classList.add('col-4', 'macroCard__align');
+                    let tagIconCol = document.createElement('div');
+                    tagIconCol.classList.add('col-4', 'macroCard__align');
 
-                tagCard.setAttribute('id', `${tagTitle}`);
+                    tagCard.setAttribute('id', `${tagTitle}`);
 
-                for (let k = 0; k <= Object.keys(tagIcons).length - 1; k++) {
-                    if (tagTitle == Object.keys(tagIcons)[k]) {
-                        let img = document.createElement('img');
-                        img.setAttribute('src', tagIcons[Object.keys(tagIcons)[k]])
-                        img.classList.add('tagFreeImg');
-                        tagIconCol.appendChild(img);
-                    } else {
-                        console.log('Looking for coincidences')
+                    for (let k = 0; k <= Object.keys(tagIcons).length - 1; k++) {
+                        if (tagTitle == Object.keys(tagIcons)[k]) {
+                            let img = document.createElement('img');
+                            img.setAttribute('src', tagIcons[Object.keys(tagIcons)[k]])
+                            img.classList.add('tagFreeImg');
+                            tagIconCol.appendChild(img);
+                        } else {
+                            console.log('Looking for coincidences')
+                        }
                     }
+
+                    let tagTitleCol = document.createElement('div');
+                    tagTitleCol.classList.add('col-6', 'macroCard__align');
+
+                    tagCard.appendChild(tagIconCol);
+                    tagCard.appendChild(tagTitleCol);
+
+                    tagTitleCol.appendChild(tag__title);
+
+                    tagsContainer.appendChild(tagCard);
                 }
-
-                let tagTitleCol = document.createElement('div');
-                tagTitleCol.classList.add('col-6', 'macroCard__align');
-
-                tagCard.appendChild(tagIconCol);
-                tagCard.appendChild(tagTitleCol);
-
-                tagTitleCol.appendChild(tag__title);
-
-                tagsContainer.appendChild(tagCard);
+            } else {
+                console.log(1, "We have no information about this article's tags")
+                noDataToShow(tagsContainer, "We have no information about this article's tags")
             }
-
         } else {
-            tagsSelect.classList.add('d-none');
+            console.log(2, "We have no information about this article's tags")
+            noDataToShow(tagsContainer, "We have no information about this article's tags")
         }
         //ALLERGENS & TRACES
         allergens = []
@@ -599,43 +631,50 @@ function showData(data) {
                 correctedAllergens.splice(correctedAllergens.indexOf(hideAllergenCards[i]), 1)
             }
             // console.log(correctedAllergens);
-            for (i = 0; i <= correctedAllergens.length - 1; i++) {
-                let allergenTitle = correctedAllergens[i];
-                let allergensCard = document.createElement('div');
-                allergensCard.classList.add('allergens__card', 'row');
-                //allergensContainer.classList.add('allergens__card', 'row')
+            if (correctedAllergens.length > 0) {
+                for (i = 0; i <= correctedAllergens.length - 1; i++) {
+                    let allergenTitle = correctedAllergens[i];
+                    let allergensCard = document.createElement('div');
+                    allergensCard.classList.add('allergens__card', 'row');
+                    //allergensContainer.classList.add('allergens__card', 'row')
 
-                let allergen__title = document.createElement('p');
-                allergen__title.textContent = allergenTitle;
-                allergen__title.classList.add('simpleText', 'capitalize')
+                    let allergen__title = document.createElement('p');
+                    allergen__title.textContent = allergenTitle;
+                    allergen__title.classList.add('simpleText', 'capitalize')
 
-                let allergenIconCol = document.createElement('div');
-                allergenIconCol.classList.add('col-4', 'macroCard__align');
+                    let allergenIconCol = document.createElement('div');
+                    allergenIconCol.classList.add('col-4', 'macroCard__align');
 
-                allergenIconCol.setAttribute('id', `${allergenTitle}`);
+                    allergenIconCol.setAttribute('id', `${allergenTitle}`);
 
-                for (let k = 0; k <= Object.keys(allergenIcons).length - 1; k++) {
-                    if (allergenTitle == Object.keys(allergenIcons)[k]) {
-                        let img = document.createElement('img');
-                        img.setAttribute('src', allergenIcons[Object.keys(allergenIcons)[k]])
-                        img.classList.add('allergenImg');
-                        allergenIconCol.appendChild(img);
-                    } else {
-                        console.log('Looking for coincidences')
+                    for (let k = 0; k <= Object.keys(allergenIcons).length - 1; k++) {
+                        if (allergenTitle == Object.keys(allergenIcons)[k]) {
+                            let img = document.createElement('img');
+                            img.setAttribute('src', allergenIcons[Object.keys(allergenIcons)[k]])
+                            img.classList.add('allergenImg');
+                            allergenIconCol.appendChild(img);
+                        } else {
+                            console.log('Looking for coincidences')
+                        }
                     }
+
+                    let allergenTitleCol = document.createElement('div');
+                    allergenTitleCol.classList.add('col-6', 'macroCard__align');
+
+                    allergensCard.appendChild(allergenIconCol);
+                    allergensCard.appendChild(allergenTitleCol);
+                    allergenTitleCol.appendChild(allergen__title);
+
+                    allergensContainer.appendChild(allergensCard);
                 }
-
-                let allergenTitleCol = document.createElement('div');
-                allergenTitleCol.classList.add('col-6', 'macroCard__align');
-
-                allergensCard.appendChild(allergenIconCol);
-                allergensCard.appendChild(allergenTitleCol);
-                allergenTitleCol.appendChild(allergen__title);
-
-                allergensContainer.appendChild(allergensCard);
+            } else {
+                console.log(1, "We have no information about this article's allergens");
+                noDataToShow(allergensContainer, "We have no information about this article's allergens");
             }
         } else {
-            allergensSelect.classList.add('d-none');
+            //allergensSelect.classList.add('d-none');
+            console.log(2, "We have no information about this article's allergens");
+            noDataToShow(allergensContainer, "We have no information about this article's allergens");
         }
         // main.scrollTo({
         //     top: 800,
@@ -666,6 +705,11 @@ function showData(data) {
 
     } else {
         console.log("Product not found");
+        resetInput();
+        closeViews(fifth);
+        fifth.setAttribute('style', "opacity: .5");
+        alertMsg.textContent = "Sorry, we couldn't find this product"
+        alertCard.classList.remove('d-none');
     }
 }
 
@@ -721,7 +765,7 @@ function showAlternatives(data) {
             }
         }
     } else {
-        console.log("Product not found");
+        noDataToShow(alternativesContainer, "We did not found any alternatives for this item", "width: 100%; margin: 0 auto");
     }
 }
 
@@ -746,12 +790,13 @@ window.onclick = e => {
                         index.push(id[i]);
                     }
                 }
-                console.log(index.join(''));
+                //console.log(index.join(''));
                 let savedProducts = JSON.parse(localStorage.getItem('products'));
                 savedProducts.splice(index.join(''), 1);
                 localStorage.setItem('products', JSON.stringify(savedProducts));
                 savedItemsContainer.innerHTML = "";
                 showSavedData();
+                closeSeventhViewSelects();
             } else {
                 console.log("Not an alternative product card");
             }
@@ -853,7 +898,10 @@ sendButton.addEventListener('click', () => {
         sixth.classList.add('d-none');
         // console.log(code)
         if ((code == "") || (code == undefined) || (code == null)) {
-            fifth.classList.remove('d-none');
+            closeViews(fifth);
+            fifth.setAttribute('style', "opacity: .5");
+            alertMsg.textContent = "Sorry, this code is invalid";
+            alertCard.classList.remove('d-none');
         } else {
             closeViews(seventh);
             changeLink(code);
@@ -1004,7 +1052,11 @@ menuButton.addEventListener('click', () => {
         menu.classList.add("menu__opened");
         menu.classList.remove("menu__closed");
         menuScan.classList.remove('d-none');
-        menuSearchHistory.classList.remove('d-none');
+        if (currentView == 'seventh') {
+            menuSearchHistory.classList.remove('d-none');
+        } else if (currentView == 'eighth') {
+            menuGoBack.classList.remove('d-none');
+        }
         setTimeout(() => {
             document.querySelectorAll('.optionIcon').forEach(option => {
                 option.classList.remove('icon__color');
@@ -1013,7 +1065,11 @@ menuButton.addEventListener('click', () => {
                 option.classList.add('icon__opened');
             })
             menuScan.classList.add('menu__optionsBorder');
-            menuSearchHistory.classList.add('menu__optionsBorder');
+            if (currentView == 'seventh') {
+                menuSearchHistory.classList.add('menu__optionsBorder');
+            } else if (currentView == 'eighth') {
+                menuGoBack.classList.add('menu__optionsBorder');
+            }
         }, 1500);
         menuClicked = true;
     } else {
@@ -1028,10 +1084,18 @@ menuButton.addEventListener('click', () => {
             option.classList.add('icon__color');
         })
         menuScan.classList.remove('menu__optionsBorder');
-        menuSearchHistory.classList.remove('menu__optionsBorder');
+        if (currentView == 'seventh') {
+            menuSearchHistory.classList.remove('menu__optionsBorder');
+        } else if (currentView == 'eighth') {
+            menuGoBack.classList.remove('menu__optionsBorder');
+        }
         setTimeout(() => {
             menuScan.classList.add('d-none');
-            menuSearchHistory.classList.add('d-none');
+            if (currentView == 'seventh') {
+                menuSearchHistory.classList.add('d-none');
+            } else if (currentView == 'eighth') {
+                menuGoBack.classList.add('d-none');
+            }
         }, 100);
         menuClicked = false;
     }
@@ -1055,6 +1119,27 @@ menuSearchHistory.addEventListener('click', () => {
     }, 3000);
 })
 
+menuGoBack.addEventListener('click', () => {
+    closeViews(sixth);
+    closeSeventhViewSelects();
+    resetContainers();
+    resetInput();
+    setTimeout(() => {
+        let data = JSON.parse(localStorage.getItem('products'));
+        if(data.length>0){
+            closeViews(seventh);
+            changeLink(data[0]['id']);
+        }else{
+            closeViews(first);
+        }
+    }, 3000);
+})
+
+alertButton.addEventListener('click', ()=>{
+    alertCard.classList.add('d-none');
+    alertMsg.textContent ="";
+    fifth.removeAttribute('style', 'opacity:0.5')
+})
 
 //<a href="https://lovepik.com/images/png-cartoon-fox.html">Cartoon Fox Png vectors by Lovepik.com</a>
 

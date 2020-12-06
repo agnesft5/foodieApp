@@ -309,16 +309,16 @@ canvas{
     /* display: flex;
     justify-content: center;
     align-items: center; */
-    position: fixed;
+    position: relative;
     width: 99.5%;
     height: 40vh;
-    z-index: 10;
+    /* z-index: 10; */
     background-color: rgb(217, 241, 228);
     top: 0;
     left: 0;
     border-radius: .25rem;
     margin: 0 auto !important;
-    box-shadow: 2px 2px rgba(180, 228, 201, .5)
+    /* box-shadow: 2px 2px rgba(180, 228, 201, .5) */
 }
 .foodImg__position{
     display: flex;
@@ -364,7 +364,7 @@ canvas{
     position: relative;
     left: 0;
     width: 100%;
-    top: 41vh;
+    /* top: 41vh; */
     max-height: 40vh;
     overflow: scroll;
 }
@@ -387,7 +387,7 @@ canvas{
 }
 .quantityTitle__closed, .ingredientsSelect__closed, .tagsSelect__closed, .allergensSelect__closed, .alternativesSelect__closed{
     position: relative;
-    top: 41vh;
+    /* top: 41vh; */
     text-align: left;
     /* border-bottom: 1.5px solid #167663; */
     width: 93%;
@@ -397,7 +397,7 @@ canvas{
 }
 .ingredientsSelect__closed{
     border-bottom: none;
-    top: 41vh;
+    /* top: 41vh; */
     background-color: rgb(217, 241, 228);
 }
 .ingredients__separator{
@@ -408,7 +408,7 @@ canvas{
 }
 .quantityTitle__opened{
     position: relative;
-    top: 41vh;
+    /* top: 41vh; */
     text-align: left;
     /* border-bottom: 1.5px solid #167663; */
     width: 93%;
@@ -418,7 +418,7 @@ canvas{
 }
 .ingredientsSelect__opened{
     position: relative;
-    top: 41vh;
+    /* top: 41vh; */
     text-align: left;
     width: 93%;
     margin: 0 auto;
@@ -459,7 +459,7 @@ canvas{
 }
 .tagsSelect__closed{
     border-bottom: none;
-    top: 43vh;
+    /* top: 43vh; */
     background-color: rgb(217, 241, 228);
 }
 .tags__separator{
@@ -470,7 +470,7 @@ canvas{
 }
 .tagsSelect__opened{
     position: relative;
-    top: 43vh;
+    /* top: 43vh; */
     text-align: left;
     width: 93%;
     margin: 0 auto;
@@ -498,7 +498,7 @@ canvas{
 }
 .allergensSelect__closed{
     border-bottom: none;
-    top: 45vh;
+    /* top: 45vh; */
     background-color: rgb(217, 241, 228);
 }
 .allergens__separator{
@@ -509,7 +509,7 @@ canvas{
 }
 .allergensSelect__opened{
     position: relative;
-    top: 45vh;
+    /* top: 45vh; */
     text-align: left;
     width: 93%;
     margin: 0 auto;
@@ -538,7 +538,7 @@ canvas{
 }
 .alternativesSelect__closed{
     border-bottom: none;
-    top: 47vh;
+    /* top: 47vh; */
     background-color: rgb(217, 241, 228);
 }
 .alternatives__separator{
@@ -549,7 +549,7 @@ canvas{
 }
 .alternativesSelect__opened{
     position: relative;
-    top: 47vh;
+    /* top: 47vh; */
     text-align: left;
     width: 93%;
     margin: 0 auto;
@@ -618,7 +618,7 @@ canvas{
 }
 .menu{
     border: 1px solid rgba(180, 228, 201, 1);
-    background-color: rgba(250, 250, 250, .5);
+    background-color: rgba(250, 250, 250, 1);
     width: 12vw;
     border-radius: .25rem;
     box-shadow: 1px 1px #167663;
@@ -657,4 +657,30 @@ canvas{
 .eraseIcon{
     font-size: 1.1rem;
     color: #167663;
+}
+.alert__card{
+    position: fixed;
+    top: 38vh;
+    left: 10vw;
+    border-radius: .75rem;
+    border: 2px solid rgba(180, 228, 201, 1);
+    background-color: rgba(233, 245, 239, 1);
+    height: 20vh;
+    width: 80%;
+    margin: 0 auto !important;
+}
+.alert__button{
+    background-color: white;
+    border: 2px solid rgba(180, 228, 201, 1);
+    color: rgba(180, 228, 201, 1);
+    width: 25vw;
+    font-family: 'Alegreya Sans', sans-serif;
+    font-size: 1.25rem;
+    outline: none;
+}
+.alert__button:hover, .alert__button:focus{
+    background-color: rgba(233, 245, 239, 1);
+    border: 2px solid rgba(180, 228, 201, 1);
+    color: rgba(180, 228, 201, 1);
+    outline: none;
 }
