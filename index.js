@@ -899,6 +899,7 @@ sendButton.addEventListener('click', () => {
         // console.log(code)
         if ((code == "") || (code == undefined) || (code == null)) {
             closeViews(fifth);
+            resetInput();
             fifth.setAttribute('style', "opacity: .5");
             alertMsg.textContent = "Sorry, this code is invalid";
             alertCard.classList.remove('d-none');
@@ -1140,8 +1141,6 @@ alertButton.addEventListener('click', ()=>{
     alertMsg.textContent ="";
     fifth.removeAttribute('style', 'opacity:0.5')
 })
-
-//<a href="https://lovepik.com/images/png-cartoon-fox.html">Cartoon Fox Png vectors by Lovepik.com</a>
 
 //8422904015553
 //8436008521063
