@@ -705,7 +705,6 @@ function showData(data) {
 
     } else {
         console.log("Product not found");
-        resetInput();
         closeViews(fifth);
         fifth.setAttribute('style', "opacity: .5");
         alertMsg.textContent = "Sorry, we couldn't find this product"
@@ -899,7 +898,6 @@ sendButton.addEventListener('click', () => {
         // console.log(code)
         if ((code == "") || (code == undefined) || (code == null)) {
             closeViews(fifth);
-            resetInput();
             fifth.setAttribute('style', "opacity: .5");
             alertMsg.textContent = "Sorry, this code is invalid";
             alertCard.classList.remove('d-none');
@@ -1137,6 +1135,7 @@ menuGoBack.addEventListener('click', () => {
 })
 
 alertButton.addEventListener('click', ()=>{
+    resetInput();
     alertCard.classList.add('d-none');
     alertMsg.textContent ="";
     fifth.removeAttribute('style', 'opacity:0.5')
